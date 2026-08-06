@@ -22,10 +22,7 @@ from core.container import (
 
     DependencyType,
 
-    create_logger,
-
-    create_placeholder_service
-
+    create_logger
 )
 
 from core.memory import (
@@ -44,11 +41,6 @@ from core.memory import (
 
 from core.runtime import (
     RuntimeManager
-)
-
-
-from core.container import (
-    DependencyType
 )
 
 
@@ -154,23 +146,24 @@ async def lifespan(app: FastAPI):
         "mock"
     )
 
+    memory_manager = MemoryManager()
+
+    
+    working_memory = WorkingMemory()
+
+
+    session_memory = SessionMemory()
+
+    long_term_memory = LongTermMemory()
+
+    knowledge_memory = KnowledgeMemory()
+
+    memory_service = MemoryService(
+        memory_manager
+    )
+
+
     runtime_manager = RuntimeManager()
-
-
-    provider_manager = container.get(
-        DependencyType.PROVIDER
-    )
-
-
-    memory_manager = container.get(
-        DependencyType.MEMORY
-    )
-
-
-    tool_registry = container.get(
-        DependencyType.TOOL_REGISTRY
-    )
-
 
 
     runtime_manager.initialize(
@@ -184,17 +177,6 @@ async def lifespan(app: FastAPI):
     )
 
 
-
-    container.register(
-
-        DependencyType.RUNTIME,
-
-        create_placeholder_service(
-            "runtime_manager"
-        )
-
-    )
-
     container.register(
 
         DependencyType.RUNTIME,
@@ -203,21 +185,8 @@ async def lifespan(app: FastAPI):
 
     )
 
-    memory_manager = MemoryManager()
 
 
-    working_memory = WorkingMemory()
-
-
-    session_memory = SessionMemory()
-
-    long_term_memory = LongTermMemory()
-
-    knowledge_memory = KnowledgeMemory()
-
-    memory_service = MemoryService(
-        memory_manager
-    )
 
 
 

@@ -4,13 +4,24 @@ AgentForge Runtime Engine.
 Core execution orchestrator.
 """
 
-
-from core.runtime import (
+from core.runtime.runtime_types import (
     AgentTask,
-    ExecutionContext,
-    AgentLifecycleManager,
-    AgentLifecycleState,
-    TaskDispatcher,
+    AgentLifecycleState
+)
+
+from core.runtime.execution_context import (
+    ExecutionContext
+)
+
+from core.runtime.agent_lifecycle import (
+    AgentLifecycleManager
+)
+
+from core.runtime.task_dispatcher import (
+    TaskDispatcher
+)
+
+from core.runtime.workflow_runner import (
     WorkflowRunner
 )
 

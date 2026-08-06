@@ -1,7 +1,8 @@
 from core.runtime.runtime_types import (
     RuntimeStatus,
     ExecutionStatus,
-    AgentTask
+    AgentTask,
+    AgentLifecycleState
 )
 
 
@@ -46,7 +47,9 @@ __all__ = [
     "RuntimeEngine",
 
     "TaskDispatcher",
-    "WorkflowRunner"
+    "WorkflowRunner",
+
+    "AgentLifecycleState"
 
 
 
