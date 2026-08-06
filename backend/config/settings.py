@@ -66,7 +66,7 @@ class Settings(BaseSettings):
 
     DEFAULT_PROVIDER: str = "gemini"
 
-    GEMINI_API_KEY: str = ""
+    GEMINI_API_KEY: str | None = None
 
     OPENAI_API_KEY: str = ""
 

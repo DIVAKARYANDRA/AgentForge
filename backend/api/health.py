@@ -9,7 +9,12 @@ from core.container import (
     get_dependency,
     DependencyType
 )
+from core.providers import (
+    ProviderFactory,
+    ProviderConfig
+)
 
+from core.base.base_types import ExecutionContext
 router = APIRouter(
     tags=["Health"]
 )
@@ -155,4 +160,49 @@ async def tools():
 
     return {
         "available_tools": tool_list
+    }
+
+@router.get("/gemini-test")
+async def gemini_test():
+
+
+    config = ProviderConfig(
+
+        name="gemini",
+
+        model="gemini-1.5-flash",
+
+        api_key=settings.GEMINI_API_KEY
+
+    )
+
+
+    provider = ProviderFactory.create(
+        config
+    )
+
+
+    context = ExecutionContext()
+
+
+    response = await provider.generate(
+
+        "Explain what an AI agent is in one sentence.",
+
+        context
+
+    )
+
+
+    return {
+
+        "provider":
+            response.provider,
+
+        "model":
+            response.model,
+
+        "response":
+            response.content
+
     }
