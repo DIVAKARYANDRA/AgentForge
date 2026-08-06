@@ -13,10 +13,9 @@ from core.memory.memory_types import (
     MemoryType
 )
 
-from core.registry import (
+from core.registry.tool_selector import (
     ToolSelector
 )
-
 
 
 class WorkflowRunner:

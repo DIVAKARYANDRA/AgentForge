@@ -100,15 +100,3 @@ class RuntimeTask:
         default_factory=dict
     )
 
-
-@dataclass
-class ToolDecision:
-    """
-    Represents selected tool.
-    """
-
-    use_tool: bool = False
-
-    tool_name: Optional[str] = None
-
-    reason: str = ""

@@ -3,7 +3,7 @@ AgentForge Tool Selection Engine.
 """
 
 
-from core.runtime.runtime_types import (
+from core.registry.tool_types import (
     ToolDecision
 )
 
