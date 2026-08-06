@@ -1,0 +1,10 @@
+{
+    "name": "search",
+    "version": "1.0.0",
+    "description": "Search information from external sources",
+    "author": "AgentForge",
+    "permissions": [
+        "internet_access"
+    ],
+    "enabled": true
+}

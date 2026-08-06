@@ -1,7 +1,7 @@
 {
-    "name": "base_tool",
+    "name": "calculator",
     "version": "1.0.0",
-    "description": "Base AgentForge tool",
+    "description": "Perform mathematical calculations",
     "author": "AgentForge",
     "permissions": [],
     "enabled": true
