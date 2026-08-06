@@ -33,6 +33,8 @@ from core.memory import (
     WorkingMemory,
     SessionMemory
 )
+from core.memory.memory_types import MemoryType
+
 from config.settings import settings
 
 
