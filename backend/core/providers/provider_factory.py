@@ -5,7 +5,7 @@ Creates AI providers dynamically.
 """
 
 
-from core.providers import ProviderConfig
+from core.providers.provider_config import ProviderConfig
 
 
 from providers import (
