@@ -15,7 +15,7 @@ from core.providers import (
     ProviderConfig
 )
 
-from core.providers import ProviderHealth
+from core.providers.provider_types import ProviderHealth
 
 class MockProvider(BaseProvider):
 
