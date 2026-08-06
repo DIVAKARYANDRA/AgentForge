@@ -9,9 +9,6 @@ framework dependencies.
 from typing import Any
 
 
-from app.state import state
-
-
 from core.container import DependencyType
 
 
@@ -23,6 +20,7 @@ def get_container():
     """
     Retrieve active application container.
     """
+    from app.state import state
 
     if state.container is None:
 
