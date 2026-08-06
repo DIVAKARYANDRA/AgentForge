@@ -12,6 +12,9 @@ from core.runtime.runtime_types import (
 from core.memory.memory_types import (
     MemoryType
 )
+from executor.tool_executor import (
+    ToolExecutor
+)
 
 from core.registry.tool_selector import (
     ToolSelector
@@ -44,6 +47,14 @@ class WorkflowRunner:
         self.tool_selector = (
             ToolSelector()
         )
+
+        self.tool_executor = None
+
+        if tools:
+
+            self.tool_executor = ToolExecutor(
+                tools
+            )
 
 
 
@@ -203,7 +214,7 @@ class WorkflowRunner:
             if decision.use_tool:
 
 
-                tool_result = await self.execute_tool(
+                tool_result = await self.tool_executor.execute(
 
                     decision.tool_name,
 
@@ -271,52 +282,6 @@ class WorkflowRunner:
                 "completed"
 
         }
-
-
-
-
-
-    async def execute_tool(
-        self,
-        tool_name,
-        task
-    ):
-
-        """
-        Execute selected tool.
-        """
-
-
-        if not self.tools:
-
-            return None
-
-
-
-        tool = self.tools.get(
-
-            tool_name
-
-        )
-
-
-        if tool:
-            
-            return await tool.execute(
-
-                task.description
-
-            )
-
-
-        return {
-
-            "error":
-                "Tool not found"
-
-        }
-
-
 
 
 
