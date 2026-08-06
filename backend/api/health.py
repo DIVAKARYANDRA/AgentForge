@@ -241,3 +241,22 @@ async def provider_health():
         for name,value in status.items()
 
     }
+
+
+@router.get("/memory")
+async def memory_status():
+
+
+    manager = get_dependency(
+
+        DependencyType.MEMORY
+
+    )
+
+
+    return {
+
+        "available_memories":
+            manager.available_memories()
+
+    }

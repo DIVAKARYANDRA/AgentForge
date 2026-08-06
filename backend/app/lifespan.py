@@ -28,7 +28,11 @@ from core.container import (
 
 )
 
-
+from core.memory import (
+    MemoryManager,
+    WorkingMemory,
+    SessionMemory
+)
 from config.settings import settings
 
 
@@ -144,6 +148,42 @@ async def lifespan(app: FastAPI):
         create_placeholder_service(
             "runtime_manager"
         )
+
+    )
+
+    memory_manager = MemoryManager()
+
+
+    working_memory = WorkingMemory()
+
+
+    session_memory = SessionMemory()
+
+
+
+    memory_manager.register_memory(
+
+        MemoryType.WORKING,
+
+        working_memory
+
+    )
+
+
+
+    memory_manager.register_memory(
+
+        MemoryType.SESSION,
+
+        session_memory
+
+    )
+
+    container.register(
+
+        DependencyType.MEMORY,
+
+        memory_manager
 
     )
 

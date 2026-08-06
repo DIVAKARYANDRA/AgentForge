@@ -2,32 +2,51 @@
 Base Memory Contract.
 """
 
+
 from abc import ABC, abstractmethod
 
 from typing import Any
 
 
+
 class BaseMemory(ABC):
 
     """
-    Abstract memory interface.
+    Common memory interface.
     """
 
-    @abstractmethod
-    async def save(
-        self,
-        key: str,
-        value: Any,
-    ) -> None:
-        ...
+
 
     @abstractmethod
-    async def load(
+    async def store(
         self,
-        key: str,
-    ) -> Any:
-        ...
+        key:str,
+        value:Any
+    ):
+        pass
+
+
 
     @abstractmethod
-    async def clear(self) -> None:
-        ...
+    async def retrieve(
+        self,
+        key:str
+    ):
+        pass
+
+
+
+    @abstractmethod
+    async def delete(
+        self,
+        key:str
+    ):
+        pass
+
+
+
+    @abstractmethod
+    async def clear(
+        self
+    ):
+        pass
