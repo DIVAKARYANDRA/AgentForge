@@ -41,7 +41,7 @@ class AgentLifecycleManager:
             ],
 
 
-            AAgentLifecycleState.INITIALIZED: [
+            AgentLifecycleState.INITIALIZED: [
 
                 AgentLifecycleState.PLANNING,
 
