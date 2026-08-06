@@ -25,6 +25,8 @@ from core.runtime.workflow_runner import (
     WorkflowRunner
 )
 
+from core.memory.memory_types import MemoryType
+
 class RuntimeEngine:
     """
     Executes agent tasks.
@@ -208,11 +210,12 @@ class RuntimeEngine:
 
             await self.memory.store(
 
+                MemoryType.SESSION,
+
                 "last_response",
 
                 response
 
             )
-
 
         return response
