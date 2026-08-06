@@ -85,6 +85,9 @@ class RuntimeEngine:
         Execute agent workflow.
         """
 
+        self.lifecycle = AgentLifecycleManager()
+
+
 
         try:
 
