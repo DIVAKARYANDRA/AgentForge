@@ -10,8 +10,7 @@ from enum import Enum
 
 from dataclasses import dataclass, field
 
-
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 
 
@@ -100,3 +99,16 @@ class RuntimeTask:
     metadata: Dict[str, Any] = field(
         default_factory=dict
     )
+
+
+@dataclass
+class ToolDecision:
+    """
+    Represents selected tool.
+    """
+
+    use_tool: bool = False
+
+    tool_name: Optional[str] = None
+
+    reason: str = ""

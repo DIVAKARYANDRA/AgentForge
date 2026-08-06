@@ -8,7 +8,9 @@ from core.runtime.runtime_types import (
     AgentTask,
     AgentLifecycleState
 )
-
+from core.registry import (
+    ToolSelector
+)
 from core.runtime.execution_context import (
     ExecutionContext
 )
@@ -50,6 +52,8 @@ class RuntimeEngine:
 
         self.planner = planner
 
+        self.tool_selector = ToolSelector()
+
 
         self.lifecycle = (
             AgentLifecycleManager()
@@ -65,7 +69,9 @@ class RuntimeEngine:
 
             provider=self.provider,
 
-            memory=self.memory
+            memory=self.memory,
+
+            tools=self.tools
 
         )
 
