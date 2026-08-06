@@ -38,7 +38,8 @@ class RuntimeEngine:
         self,
         memory=None,
         provider=None,
-        tools=None
+        tools=None,
+        planner=None
     ):
 
         self.memory = memory
@@ -46,6 +47,8 @@ class RuntimeEngine:
         self.provider = provider
 
         self.tools = tools
+
+        self.planner = planner
 
 
         self.lifecycle = (
@@ -96,11 +99,54 @@ class RuntimeEngine:
 
             )
 
-            runtime_task = (
-                self.dispatcher.create_tasks_from_goal(
+            plan = None
+
+            if self.planner:
+
+
+                plan = self.planner.create_plan(
+
                     task.goal
+
                 )
-            )
+
+
+                runtime_tasks = []
+
+
+                for planned_task in plan.tasks:
+
+
+                    runtime_task = (
+
+                        self.dispatcher.create_task(
+
+                            planned_task.task_id,
+
+                            planned_task.description
+
+                        )
+
+                    )
+
+
+                    runtime_tasks.append(
+                        runtime_task
+                    )
+
+            else:
+
+
+                runtime_tasks = (
+
+                    self.dispatcher.create_tasks_from_goal(
+
+                        task.goal
+
+                    )
+
+                )
+
 
 
             # Planning phase
@@ -144,19 +190,29 @@ class RuntimeEngine:
 
             return {
 
-                "task_id":
-                    task.task_id,
+                    "task_id":
+                        task.task_id,
 
-                "goal":
-                    task.goal,
 
-                "status":
-                    "completed",
+                    "goal":
+                        task.goal,
 
-                "result":
-                    result
 
-            }
+                    "plan":
+
+                        plan.metadata
+                        if plan
+                        else None,
+
+
+                    "status":
+                        "completed",
+
+
+                    "result":
+                        result
+
+                }
 
 
         except Exception as error:

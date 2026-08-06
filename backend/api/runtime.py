@@ -88,3 +88,27 @@ async def runtime_health():
 
 
     return await checker.check()
+
+@router.get("/planner")
+async def planner_status():
+
+
+    runtime_manager = get_dependency(
+
+        DependencyType.RUNTIME
+
+    )
+
+
+    runtime = (
+        runtime_manager.get_runtime()
+    )
+
+
+    return {
+
+        "planner_enabled":
+
+            runtime.planner is not None
+
+    }

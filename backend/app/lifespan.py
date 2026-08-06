@@ -42,7 +42,9 @@ from core.memory import (
 from core.runtime import (
     RuntimeManager
 )
-
+from core.planner import (
+    Planner
+)
 
 logger = logging.getLogger(__name__)
 
@@ -162,6 +164,8 @@ async def lifespan(app: FastAPI):
         memory_manager
     )
 
+    planner = Planner()
+
 
     runtime_manager = RuntimeManager()
 
@@ -172,7 +176,10 @@ async def lifespan(app: FastAPI):
 
         provider=await provider_manager.get_provider(),
 
-        tools=tool_registry
+        tools=tool_registry,
+
+        planner=planner
+
 
     )
 
