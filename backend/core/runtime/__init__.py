@@ -4,7 +4,9 @@ from core.runtime.runtime_types import (
     AgentTask,
     AgentLifecycleState
 )
-
+from core.runtime.runtime_health import (
+    RuntimeHealthChecker
+)
 
 from core.runtime.execution_context import (
     ExecutionContext
@@ -56,7 +58,8 @@ __all__ = [
 
     "AgentLifecycleState",
 
-    "RuntimeManager"
+    "RuntimeManager",
+    "RuntimeHealthChecker"
 
 
 

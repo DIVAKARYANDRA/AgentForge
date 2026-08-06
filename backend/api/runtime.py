@@ -15,6 +15,9 @@ from core.container import (
 from core.runtime import (
     AgentTask
 )
+from core.runtime import (
+    RuntimeHealthChecker
+)
 
 
 
@@ -61,3 +64,27 @@ async def execute_agent(
         "result":result
 
     }
+
+
+@router.get("/health")
+async def runtime_health():
+
+
+    runtime_manager = get_dependency(
+
+        DependencyType.RUNTIME
+
+    )
+
+
+    runtime = (
+        runtime_manager.get_runtime()
+    )
+
+
+    checker = RuntimeHealthChecker(
+        runtime
+    )
+
+
+    return await checker.check()

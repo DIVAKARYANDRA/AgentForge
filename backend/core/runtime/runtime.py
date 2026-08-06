@@ -140,7 +140,21 @@ class RuntimeEngine:
             )
 
 
-            return result
+            return {
+
+                "task_id":
+                    task.task_id,
+
+                "goal":
+                    task.goal,
+
+                "status":
+                    "completed",
+
+                "result":
+                    result
+
+            }
 
 
         except Exception as error:
@@ -153,7 +167,18 @@ class RuntimeEngine:
             )
 
 
-            raise error
+            return {
+
+                "task_id":
+                    task.task_id,
+
+                "status":
+                    "failed",
+
+                "error":
+                    str(error)
+
+            }
 
 
 
