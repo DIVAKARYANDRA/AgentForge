@@ -47,3 +47,16 @@ class ProviderResponse:
     metadata: Dict = field(
         default_factory=dict
     )
+
+
+@dataclass
+class ProviderHealth:
+    """
+    Provider health information.
+    """
+
+    name: str
+
+    healthy: bool
+
+    message: str = ""

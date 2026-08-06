@@ -17,7 +17,7 @@ from core.providers import (
     ProviderConfig
 )
 
-
+from core.providers import ProviderHealth
 
 class GeminiProvider(BaseProvider):
 
@@ -69,3 +69,31 @@ class GeminiProvider(BaseProvider):
             model=self.config.model
 
         )
+
+    async def health_check(self):
+
+        try:
+
+            return ProviderHealth(
+
+                name=self.name,
+
+                healthy=True,
+
+                message="Gemini provider available"
+
+            )
+
+
+        except Exception as error:
+
+
+            return ProviderHealth(
+
+                name=self.name,
+
+                healthy=False,
+
+                message=str(error)
+
+            )

@@ -19,6 +19,8 @@ router = APIRouter(
     tags=["Health"]
 )
 
+from core.providers import ProviderManager
+
 
 @router.get("/")
 async def root():
@@ -204,5 +206,38 @@ async def gemini_test():
 
         "response":
             response.content
+
+    }
+
+@router.get("/providers")
+async def providers():
+
+    manager = get_dependency(
+        DependencyType.PROVIDER
+    )
+
+
+    return manager.status()
+
+
+@router.get("/provider-health")
+async def provider_health():
+
+    manager = get_dependency(
+        DependencyType.PROVIDER
+    )
+
+
+    status = await manager.health_status()
+
+
+    return {
+
+        name:{
+            "healthy":value.healthy,
+            "message":value.message
+        }
+
+        for name,value in status.items()
 
     }

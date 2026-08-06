@@ -8,7 +8,10 @@ from core.registry import ToolRegistry
 from fastapi import FastAPI
 from tools.calculator.tool import CalculatorTool
 import logging
-
+from core.providers import (
+    ProviderManager,
+    ProviderConfig
+)
 
 from app.state import state
 
@@ -80,14 +83,56 @@ async def lifespan(app: FastAPI):
     # Register Future Services
     # ---------------------------------
 
+    provider_manager = ProviderManager()
+
+
+    gemini_config = ProviderConfig(
+
+        name="gemini",
+
+        model="gemini-3.5-flash",
+
+        api_key=settings.GEMINI_API_KEY
+
+    )
+
+
+    provider_manager.register_provider(
+
+        "gemini",
+
+        gemini_config
+
+    )
+
+
     container.register(
 
         DependencyType.PROVIDER,
 
-        create_placeholder_service(
-            "provider_manager"
-        )
+        provider_manager
 
+    )
+
+    mock_config = ProviderConfig(
+
+        name="mock",
+
+        model="mock-model"
+
+    )
+
+
+    provider_manager.register_provider(
+
+        "mock",
+
+        mock_config
+
+    )
+
+    provider_manager.set_fallback_provider(
+        "mock"
     )
 
 

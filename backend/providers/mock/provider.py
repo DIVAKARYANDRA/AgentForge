@@ -15,7 +15,7 @@ from core.providers import (
     ProviderConfig
 )
 
-
+from core.providers import ProviderHealth
 
 class MockProvider(BaseProvider):
 
@@ -51,5 +51,17 @@ class MockProvider(BaseProvider):
             provider=self.name,
 
             model="mock-model"
+
+        )
+
+    async def health_check(self):
+
+        return ProviderHealth(
+
+            name=self.name,
+
+            healthy=True,
+
+            message="Mock provider available"
 
         )

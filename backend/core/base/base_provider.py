@@ -26,3 +26,9 @@ class BaseProvider(ABC):
         """
         Generate a response from the provider.
         """
+
+    @abstractmethod
+    async def health_check(self):
+        """
+        Check provider availability.
+        """

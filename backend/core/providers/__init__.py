@@ -8,10 +8,15 @@ from core.providers.provider_config import (
 from core.providers.provider_factory import (
     ProviderFactory
 )
+from core.providers.provider_manager import (
+    ProviderManager
+)
 
 __all__ = [
     "ProviderMetadata",
     "ProviderResponse",
     "ProviderConfig",
-    "ProviderFactory"
+    "ProviderFactory",
+    "ProviderManager"
+
 ]
