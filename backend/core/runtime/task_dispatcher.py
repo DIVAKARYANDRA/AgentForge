@@ -46,6 +46,40 @@ class TaskDispatcher:
 
 
 
+    def create_task(
+        self,
+        task_id: str,
+        description: str
+    ):
+        """
+        Create RuntimeTask from Planner output.
+
+        Planner creates:
+            PlannedTask
+
+        Dispatcher converts:
+            RuntimeTask
+        """
+
+
+        task = RuntimeTask(
+
+            task_id=task_id,
+
+            description=description
+
+        )
+
+
+        self.add_task(
+            task
+        )
+
+
+        return task
+
+
+
     def get_pending_tasks(self):
 
         """
@@ -75,6 +109,7 @@ class TaskDispatcher:
         """
         Update task execution status.
         """
+
 
         for task in self.tasks:
 
@@ -109,15 +144,17 @@ class TaskDispatcher:
 
         return self.tasks
 
+
+
     def create_tasks_from_goal(
         self,
         goal: str
     ):
 
         """
-        Temporary task generation.
+        Legacy fallback task creation.
 
-        Planner integration comes later.
+        Used when planner is unavailable.
         """
 
 
@@ -136,5 +173,7 @@ class TaskDispatcher:
 
 
         return [
+
             task
+
         ]
