@@ -5,8 +5,7 @@ Creates configured runtime engines.
 """
 
 
-from core.runtime import RuntimeEngine
-
+from core.runtime.runtime import RuntimeEngine
 
 
 class RuntimeManager:

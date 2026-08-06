@@ -30,6 +30,11 @@ from core.runtime.task_dispatcher import (
     TaskDispatcher
 )
 
+
+from core.runtime.runtime_manager import (
+    RuntimeManager
+)
+
 __all__ = [
 
     "RuntimeStatus",
@@ -49,7 +54,9 @@ __all__ = [
     "TaskDispatcher",
     "WorkflowRunner",
 
-    "AgentLifecycleState"
+    "AgentLifecycleState",
+
+    "RuntimeManager"
 
 
 
