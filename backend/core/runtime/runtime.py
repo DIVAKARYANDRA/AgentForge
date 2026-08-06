@@ -218,11 +218,18 @@ class RuntimeEngine:
         except Exception as error:
 
 
-            self.lifecycle.transition(
+            try:
 
-                AgentLifecycleState.FAILED
+                self.lifecycle.transition(
 
-            )
+                    AgentLifecycleState.FAILED
+
+                )
+
+            except Exception:
+
+                pass
+
 
 
             return {
@@ -230,14 +237,15 @@ class RuntimeEngine:
                 "task_id":
                     task.task_id,
 
+
                 "status":
                     "failed",
+
 
                 "error":
                     str(error)
 
             }
-
 
 
     async def run_agent(

@@ -41,16 +41,20 @@ class AgentLifecycleManager:
             ],
 
 
-            AgentLifecycleState.INITIALIZED: [
+            AAgentLifecycleState.INITIALIZED: [
 
-                AgentLifecycleState.PLANNING
+                AgentLifecycleState.PLANNING,
+
+                AgentLifecycleState.FAILED
 
             ],
 
 
             AgentLifecycleState.PLANNING: [
 
-                AgentLifecycleState.EXECUTING
+                AgentLifecycleState.EXECUTING,
+
+                AgentLifecycleState.FAILED
 
             ],
 
@@ -69,6 +73,12 @@ class AgentLifecycleManager:
                 AgentLifecycleState.COMPLETED,
 
                 AgentLifecycleState.FAILED
+
+            ],
+
+            AgentLifecycleState.FAILED: [
+
+                AgentLifecycleState.INITIALIZED
 
             ]
 
