@@ -46,6 +46,19 @@ async def lifespan(app: FastAPI):
 
     container = Container()
 
+    container.register(
+        DependencyType.CONFIG,
+        settings
+    )
+
+    container.register(
+
+        DependencyType.LOGGER,
+
+        create_logger()
+
+    )
+
     tool_registry = ToolRegistry()
 
     calculator = CalculatorTool()
@@ -63,21 +76,6 @@ async def lifespan(app: FastAPI):
 
     )
 
-
-    # ---------------------------------
-    # Register Logger
-    # ---------------------------------
-
-    container.register(
-
-        DependencyType.LOGGER,
-
-        create_logger()
-
-    )
-
-
-
     # ---------------------------------
     # Register Future Services
     # ---------------------------------
@@ -92,16 +90,6 @@ async def lifespan(app: FastAPI):
 
     )
 
-
-    container.register(
-
-        DependencyType.TOOL_REGISTRY,
-
-        create_placeholder_service(
-            "tool_registry"
-        )
-
-    )
 
 
     container.register(

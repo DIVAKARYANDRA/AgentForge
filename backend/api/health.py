@@ -5,8 +5,6 @@ Health API.
 from fastapi import APIRouter
 from app.state import state
 from config.settings import settings
-from app.state import state
-from core.container import DependencyType
 from core.container import (
     get_dependency,
     DependencyType
