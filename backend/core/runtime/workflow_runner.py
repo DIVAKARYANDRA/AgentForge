@@ -44,8 +44,8 @@ class WorkflowRunner:
 
         self.tools = tools
 
-        self.tool_selector = (
-            ToolSelector()
+        self.tool_selector = ToolSelector(
+            provider
         )
 
         self.tool_executor = None
@@ -199,12 +199,12 @@ class WorkflowRunner:
             )
 
 
-            decision = (
+            decision = await (
                 self.tool_selector.select(
 
                     task.description,
 
-                    available_tools
+                    self.tools.get_tool_metadata()
 
                 )
             )
@@ -218,7 +218,9 @@ class WorkflowRunner:
 
                     decision.tool_name,
 
-                    task
+                    task,
+
+                    decision.arguments
 
                 )
 

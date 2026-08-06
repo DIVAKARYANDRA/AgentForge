@@ -23,8 +23,38 @@ class CalculatorTool(BaseTool):
     def description(self):
 
         return (
-            "Performs mathematical calculations"
+            "Performs mathematical calculations "
+            "and evaluates arithmetic expressions."
         )
+
+
+
+    @property
+    def capabilities(self):
+
+        return [
+
+            "mathematics",
+
+            "arithmetic",
+
+            "numeric calculation",
+
+            "expression evaluation"
+
+        ]
+
+
+
+    @property
+    def input_schema(self):
+
+        return {
+
+            "expression":
+                "Mathematical expression to evaluate"
+
+        }
 
 
 
@@ -40,8 +70,17 @@ class CalculatorTool(BaseTool):
         )
 
 
+        # Temporary implementation
+        # Actual calculation engine
+        # will be improved later
+
         return {
 
-            "result": expression
+            "expression":
+                expression,
+
+
+            "result":
+                expression
 
         }

@@ -125,3 +125,31 @@ class ToolRegistry:
         """
 
         self._tools.clear()
+
+    def get_tool_metadata(
+        self
+    ):
+
+        metadata = []
+
+
+        for name, registration in self._tools.items():
+
+            metadata.append({
+
+                "name":
+                    name,
+
+                "description":
+                    registration.tool.description,
+
+                "capabilities":
+                    registration.tool.capabilities,
+
+                "input_schema":
+                    registration.tool.input_schema
+
+            })
+
+
+        return metadata

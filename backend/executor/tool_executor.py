@@ -27,7 +27,8 @@ class ToolExecutor:
     async def execute(
         self,
         tool_name,
-        task
+        task,
+        arguments=None
     ):
 
         """
@@ -45,7 +46,11 @@ class ToolExecutor:
 
             result = await tool.execute(
 
-                task.description
+                task.context,
+
+                **(
+                    arguments or {}
+                )
 
             )
 
