@@ -148,9 +148,13 @@ async def tools():
     )
 
 
+    if hasattr(registry, "list_tools"):
+        tool_list = registry.list_tools()
+    elif isinstance(registry, dict):
+        tool_list = list(registry.keys())
+    else:
+        tool_list = []
+
     return {
-
-        "available_tools":
-            registry.list_tools()
-
+        "available_tools": tool_list
     }
