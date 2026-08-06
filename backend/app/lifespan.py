@@ -12,7 +12,7 @@ from core.providers import (
     ProviderManager,
     ProviderConfig
 )
-
+from services.memory_service import MemoryService
 from app.state import state
 
 
@@ -37,6 +37,19 @@ from core.memory.memory_types import MemoryType
 
 from config.settings import settings
 
+from core.memory import (
+    LongTermMemory,
+    KnowledgeMemory
+)
+
+from core.runtime import (
+    RuntimeManager
+)
+
+
+from core.container import (
+    DependencyType
+)
 
 
 logger = logging.getLogger(__name__)
@@ -141,6 +154,35 @@ async def lifespan(app: FastAPI):
         "mock"
     )
 
+    runtime_manager = RuntimeManager()
+
+
+    provider_manager = container.get(
+        DependencyType.PROVIDER
+    )
+
+
+    memory_manager = container.get(
+        DependencyType.MEMORY
+    )
+
+
+    tool_registry = container.get(
+        DependencyType.TOOL_REGISTRY
+    )
+
+
+
+    runtime_manager.initialize(
+
+        memory=memory_manager,
+
+        provider=await provider_manager.get_provider(),
+
+        tools=tool_registry
+
+    )
+
 
 
     container.register(
@@ -153,6 +195,14 @@ async def lifespan(app: FastAPI):
 
     )
 
+    container.register(
+
+        DependencyType.RUNTIME,
+
+        runtime_manager
+
+    )
+
     memory_manager = MemoryManager()
 
 
@@ -160,6 +210,14 @@ async def lifespan(app: FastAPI):
 
 
     session_memory = SessionMemory()
+
+    long_term_memory = LongTermMemory()
+
+    knowledge_memory = KnowledgeMemory()
+
+    memory_service = MemoryService(
+        memory_manager
+    )
 
 
 
@@ -181,11 +239,37 @@ async def lifespan(app: FastAPI):
 
     )
 
+    memory_manager.register_memory(
+
+        MemoryType.LONG_TERM,
+
+        long_term_memory
+
+    )
+
+
+
+    memory_manager.register_memory(
+
+        MemoryType.KNOWLEDGE,
+
+        knowledge_memory
+
+    )
+
     container.register(
 
         DependencyType.MEMORY,
 
         memory_manager
+
+    )
+
+    container.register(
+
+        DependencyType.MEMORY_SERVICE,
+
+        memory_service
 
     )
 

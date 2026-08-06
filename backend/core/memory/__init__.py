@@ -19,6 +19,15 @@ from core.memory.context_builder import (
     ContextBuilder
 )
 
+from core.memory.long_term_memory import (
+    LongTermMemory
+)
+
+
+from core.memory.knowledge_memory import (
+    KnowledgeMemory
+)
+
 __all__ = [
 
     "MemoryType",
@@ -33,7 +42,11 @@ __all__ = [
 
     "ContextBuilder",
 
-    "MemoryManager"
+    "MemoryManager",
+
+    "LongTermMemory",
+
+    "KnowledgeMemory"
 
 
 

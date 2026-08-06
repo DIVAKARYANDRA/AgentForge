@@ -9,7 +9,7 @@ from app.lifespan import lifespan
 from api.router import api_router
 
 from config.settings import settings
-
+from api.runtime import router as runtime_router
 
 app = FastAPI(
 
@@ -25,4 +25,8 @@ app = FastAPI(
 
 app.include_router(
     api_router
+)
+
+app.include_router(
+    runtime_router
 )

@@ -28,3 +28,5 @@ class DependencyType(str, Enum):
     RUNTIME = "runtime"
 
     AGENT = "agent"
+
+    MEMORY_SERVICE = "memory_service"

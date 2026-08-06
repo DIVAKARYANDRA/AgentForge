@@ -20,7 +20,7 @@ router = APIRouter(
 )
 
 from core.providers import ProviderManager
-
+from core.memory import MemoryType
 
 @router.get("/")
 async def root():
@@ -119,6 +119,16 @@ async def services():
         "runtime":
             state.container.exists(
                 DependencyType.RUNTIME
+            ),
+
+        "memory":
+            state.container.exists(
+                DependencyType.MEMORY
+            ),
+
+        "memory_service":
+            state.container.exists(
+                DependencyType.MEMORY_SERVICE
             )
 
     }
@@ -258,5 +268,89 @@ async def memory_status():
 
         "available_memories":
             manager.available_memories()
+
+    }
+
+@router.get("/memory-details")
+async def memory_details():
+
+    manager = get_dependency(
+        DependencyType.MEMORY
+    )
+
+
+    return {
+
+        "available_memories":
+            manager.available_memories()
+
+    }
+
+@router.post("/memory/store")
+async def store_memory():
+
+    service = get_dependency(
+        DependencyType.MEMORY_SERVICE
+    )
+
+
+    await service.remember(
+
+        "favorite_language",
+
+        "Python",
+
+        MemoryType.LONG_TERM
+
+    )
+
+
+    return {
+
+        "status":"stored"
+
+    }
+
+
+@router.get("/memory/get")
+async def get_memory():
+
+    service = get_dependency(
+        DependencyType.MEMORY_SERVICE
+    )
+
+
+    value = await service.recall(
+
+        "favorite_language",
+
+        MemoryType.LONG_TERM
+
+    )
+
+
+    return {
+
+        "value":value
+
+    }
+
+
+@router.get("/runtime")
+async def runtime_status():
+
+
+    manager = get_dependency(
+
+        DependencyType.RUNTIME
+
+    )
+
+
+    return {
+
+        "runtime":
+
+            manager.runtime is not None
 
     }
