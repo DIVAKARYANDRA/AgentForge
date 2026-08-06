@@ -90,6 +90,14 @@ class WorkflowRunner:
                 task.result = result
 
 
+                context.add_result(
+
+                    result
+
+                )
+
+
+
                 results.append(result)
 
 
@@ -135,7 +143,11 @@ class WorkflowRunner:
 
             response = await self.provider.generate(
 
-                task.description,
+                self.build_task_prompt(
+                    task,
+                    context
+                ),
+
 
                 context
 
@@ -155,3 +167,34 @@ class WorkflowRunner:
                 "completed"
 
         }
+
+    def build_task_prompt(
+        self,
+        task,
+        context
+    ):
+
+        prompt = f"""
+
+            You are executing an agent task.
+
+            Main Goal:
+            {context.goal}
+
+
+            Current Task:
+            {task.description}
+
+
+            Previous Task Results:
+
+            {context.previous_results}
+
+
+            Use previous information
+            to complete the current task.
+
+            """
+
+
+        return prompt
