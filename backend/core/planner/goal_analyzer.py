@@ -99,12 +99,14 @@ class GoalAnalyzer:
         text = goal.lower()
 
 
+
         if any(
             word in text
             for word in [
                 "search",
                 "research",
-                "find"
+                "find",
+                "lookup"
             ]
         ):
 
@@ -113,12 +115,33 @@ class GoalAnalyzer:
             )
 
 
+
         if any(
             word in text
             for word in [
                 "calculate",
+                "compute",
+                "solve",
+                "evaluate",
+                "percentage",
+                "multiply",
+                "divide"
+            ]
+        ):
+
+            capabilities.append(
+                "calculation"
+            )
+
+
+
+        if any(
+            word in text
+            for word in [
+                "analyze",
                 "analysis",
-                "analyze"
+                "compare",
+                "evaluate data"
             ]
         ):
 
@@ -127,12 +150,14 @@ class GoalAnalyzer:
             )
 
 
+
         if any(
             word in text
             for word in [
                 "report",
                 "document",
-                "summary"
+                "summary",
+                "write"
             ]
         ):
 

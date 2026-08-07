@@ -117,6 +117,12 @@ class RuntimeEngine:
 
             if self.planner:
 
+                 print(
+                    "RUNTIME ORIGINAL GOAL:",
+                    task.goal
+                )
+
+
 
                 plan = self.planner.create_plan(
 
@@ -124,13 +130,25 @@ class RuntimeEngine:
 
                 )
 
+                print(
+                    "PLANNER TASKS:"
+                )
+
+                for planned_task in plan.tasks:
+
+                    print(
+                        planned_task.description
+                    )
+
+
+
 
                 runtime_tasks = []
 
 
                 for planned_task in plan.tasks:
 
-
+         
                     runtime_task = (
 
                         self.dispatcher.create_task(
@@ -150,6 +168,11 @@ class RuntimeEngine:
 
             else:
 
+                print(
+                    "RUNTIME ORIGINAL GOAL:",
+                    task.goal
+                )
+
 
                 runtime_tasks = (
 
@@ -159,6 +182,11 @@ class RuntimeEngine:
 
                     )
 
+                )
+
+                print(
+                    "CREATED TASKS:",
+                    runtime_tasks
                 )
 
 

@@ -56,6 +56,25 @@ class TaskDecomposer:
 
             )
 
+        # Calculation related tasks
+
+        if capabilities and "calculation" in capabilities:
+
+
+            tasks.append(
+
+                PlannedTask(
+
+                    task_id="task_001",
+
+                    description=goal,
+
+                    priority=1
+
+                )
+
+            )
+
 
 
         # Analysis related tasks
