@@ -67,7 +67,9 @@ class RuntimeEngine:
 
             self.dispatcher,
 
-            provider=self.provider,
+            provider= self.executor_provider,
+            
+            tool_provider=self.selector_provider,
 
             memory=self.memory,
 

@@ -14,7 +14,9 @@ from core.providers import (
 )
 from services.memory_service import MemoryService
 from app.state import state
-
+from core.providers.provider_roles import (
+    ProviderRole
+)
 
 from core.container import (
 
@@ -99,7 +101,7 @@ async def lifespan(app: FastAPI):
     provider_manager = ProviderManager()
 
 
-    gemini_config = ProviderConfig(
+    gemini_execution_config = ProviderConfig(
 
         name="gemini",
 
@@ -110,11 +112,50 @@ async def lifespan(app: FastAPI):
     )
 
 
+    gemini_selector_config = ProviderConfig(
+
+        name="gemini_selector",
+
+        model="gemini-2.0-flash-lite",
+
+        api_key=settings.GEMINI_API_KEY
+
+    )
+
+
     provider_manager.register_provider(
 
         "gemini",
 
-        gemini_config
+        gemini_execution_config
+
+    )
+
+
+    provider_manager.register_provider(
+
+        "gemini_selector",
+
+        gemini_selector_config
+
+    )
+
+
+
+    provider_manager.assign_role(
+
+        ProviderRole.EXECUTOR,
+
+        "gemini"
+
+    )
+
+
+    provider_manager.assign_role(
+
+        ProviderRole.TOOL_SELECTOR,
+
+        "gemini_selector"
 
     )
 
@@ -148,6 +189,8 @@ async def lifespan(app: FastAPI):
         "mock"
     )
 
+  
+
     memory_manager = MemoryManager()
 
     
@@ -169,12 +212,22 @@ async def lifespan(app: FastAPI):
 
     runtime_manager = RuntimeManager()
 
+    tool_selector_provider = await provider_manager.get_provider_for_role(
+        ProviderRole.TOOL_SELECTOR
+    )
+
+    executor_provider = await provider_manager.get_provider_for_role(
+        ProviderRole.EXECUTOR
+    )
+
 
     runtime_manager.initialize(
 
         memory=memory_manager,
 
-        provider=await provider_manager.get_provider(),
+        provider=executor_provider,
+
+        tool_provider=tool_selector_provider,
 
         tools=tool_registry,
 

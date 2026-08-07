@@ -6,7 +6,7 @@ Production LLM provider implementation.
 
 
 import google.generativeai as genai
-
+import asyncio
 
 from core.base.base_provider import BaseProvider
 
@@ -55,8 +55,12 @@ class GeminiProvider(BaseProvider):
     ):
 
 
-        response = self.model.generate_content(
+        response = await asyncio.to_thread(
+
+            self.model.generate_content,
+
             prompt
+
         )
 
 

@@ -32,6 +32,7 @@ class WorkflowRunner:
         self,
         dispatcher,
         provider=None,
+        tool_provider=None,
         memory=None,
         tools=None
     ):
@@ -45,7 +46,7 @@ class WorkflowRunner:
         self.tools = tools
 
         self.tool_selector = ToolSelector(
-            provider
+            tool_provider
         )
 
         self.tool_executor = None
@@ -192,11 +193,6 @@ class WorkflowRunner:
 
 
         if self.tools:
-
-
-            available_tools = (
-                self.tools.list_tools()
-            )
 
 
             decision = await (

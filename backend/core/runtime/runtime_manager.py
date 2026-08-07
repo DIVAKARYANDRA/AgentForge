@@ -22,7 +22,8 @@ class RuntimeManager:
         memory=None,
         provider=None,
         tools=None,
-        planner=None
+        planner=None,
+        tool_provider=None
     ):
 
         self.runtime = RuntimeEngine(
@@ -33,7 +34,9 @@ class RuntimeManager:
 
             tools=tools,
 
-            planner=planner
+            planner=planner,
+
+            tool_provider=tool_provider
 
         )
 

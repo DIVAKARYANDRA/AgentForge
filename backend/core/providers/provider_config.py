@@ -50,10 +50,10 @@ class ProviderResponse:
 
 @dataclass
 class ProviderConfig:
-    """
-    Configuration settings for initializing a provider.
-    """
+
     name: str
     model: str
     api_key: str = ""
-    extra_params: Dict[str, Any] = field(default_factory=dict)
+    extra_params: Dict[str, Any] = field(
+        default_factory=dict
+    )

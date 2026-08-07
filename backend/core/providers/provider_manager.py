@@ -13,7 +13,9 @@ from core.providers import (
     ProviderConfig,
     ProviderFactory
 )
-
+from core.providers.provider_roles import (
+    ProviderRole
+)
 
 
 class ProviderManager:
@@ -31,6 +33,8 @@ class ProviderManager:
 
 
         self.fallback_provider = None
+
+        self.role_mapping = {}
 
 
 
@@ -143,3 +147,52 @@ class ProviderManager:
                 list(self.providers.keys())
 
         }
+
+    def assign_role(
+        self,
+        role: ProviderRole,
+        provider_name: str
+    ):
+
+        if provider_name not in self.providers:
+
+            raise ValueError(
+                "Provider not registered"
+            )
+
+
+        self.role_mapping[role] = provider_name
+
+
+    async def get_provider_for_role(
+        self,
+        role: ProviderRole
+    ):
+
+
+        provider_name = (
+            self.role_mapping.get(role)
+        )
+
+
+        if not provider_name:
+
+            return await self.get_provider()
+
+
+
+        provider = self.providers[
+            provider_name
+        ]
+
+
+        health = await provider.health_check()
+
+
+        if health.healthy:
+
+            return provider
+
+
+
+        return await self.get_provider()
