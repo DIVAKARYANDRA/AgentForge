@@ -205,25 +205,10 @@ class WorkflowRunner:
                 )
             )
 
-            print(
-                "TOOL DECISION:",
-                decision
-            )
-
-
-            print(
-                "USE TOOL:",
-                decision.use_tool
-            )
-
 
 
             if decision.use_tool:
 
-                print(
-                    "EXECUTING TOOL:",
-                    decision.tool_name
-                )
 
 
                 tool_result = await self.tool_executor.execute(

@@ -37,7 +37,6 @@ class ToolSelector:
         """
         Ask AI to select best tool.
         """
-        print("TOOL SELECTOR VERSION 2 LOADED")
 
 
         if not self.provider:
@@ -114,30 +113,12 @@ Your response format:
 
 """
 
-        print(
-            "AVAILABLE TOOLS:",
-            json.dumps(
-                tool_metadata,
-                indent=2
-            )
-        )
-
-
-        print("================ TOOL SELECTOR PROMPT ================")
-        print(prompt)
-        print("======================================================")
-
         response = await self.provider.generate(
 
             prompt,
 
             None
 
-        )
-
-        print(
-            "TOOL SELECTOR RESPONSE:",
-            response.content
         )
 
 
@@ -223,10 +204,6 @@ Your response format:
 
         except Exception as error:
 
-            print(
-                "TOOL DECISION PARSE ERROR:",
-                error
-            )
 
 
             return ToolDecision(

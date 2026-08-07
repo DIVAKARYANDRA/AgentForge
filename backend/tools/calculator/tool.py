@@ -1,6 +1,12 @@
 """
 Calculator Tool.
+
+Provides safe mathematical execution.
 """
+
+
+import ast
+import operator
 
 
 from core.base.base_tool import BaseTool
@@ -37,10 +43,12 @@ class CalculatorTool(BaseTool):
         return [
 
             "arithmetic execution",
-            "percentage calculation",
-            "expression evaluation",
-            "mathematical operations"
 
+            "percentage calculation",
+
+            "expression evaluation",
+
+            "mathematical operations"
 
         ]
 
@@ -52,7 +60,7 @@ class CalculatorTool(BaseTool):
         return {
 
             "expression":
-                "Expression such as 800*0.25"
+            "Expression such as 800*0.25"
 
         }
 
@@ -65,22 +73,142 @@ class CalculatorTool(BaseTool):
     ):
 
         expression = kwargs.get(
-            "expression",
-            ""
+            "expression"
         )
 
 
-        # Temporary implementation
-        # Actual calculation engine
-        # will be improved later
+        if not expression:
 
-        return {
+            return {
 
-            "expression":
-                expression,
+                "success": False,
+
+                "error":
+                "Expression missing"
+
+            }
 
 
-            "result":
+        try:
+
+            value = self.safe_calculate(
                 expression
+            )
+
+
+            return {
+
+                "success": True,
+
+                "expression":
+                    expression,
+
+                "value":
+                    value
+
+            }
+
+
+        except Exception as error:
+
+
+            return {
+
+                "success": False,
+
+                "expression":
+                    expression,
+
+                "error":
+                    str(error)
+
+            }
+
+
+
+    def safe_calculate(
+        self,
+        expression
+    ):
+
+        """
+        Safely evaluate mathematical expressions.
+        """
+
+
+        allowed_operations = {
+
+            ast.Add:
+                operator.add,
+
+            ast.Sub:
+                operator.sub,
+
+            ast.Mult:
+                operator.mul,
+
+            ast.Div:
+                operator.truediv,
+
+            ast.Pow:
+                operator.pow
 
         }
+
+
+
+        def evaluate(node):
+
+            if isinstance(
+                node,
+                ast.Constant
+            ):
+
+                return node.value
+
+
+
+            if isinstance(
+                node,
+                ast.BinOp
+            ):
+
+                operation = (
+                    allowed_operations.get(
+                        type(node.op)
+                    )
+                )
+
+
+                if not operation:
+
+                    raise ValueError(
+                        "Unsupported operation"
+                    )
+
+
+                return operation(
+
+                    evaluate(node.left),
+
+                    evaluate(node.right)
+
+                )
+
+
+
+            raise ValueError(
+                "Invalid expression"
+            )
+
+
+
+        tree = ast.parse(
+            expression,
+            mode="eval"
+        )
+
+
+        return evaluate(
+            tree.body
+        )
