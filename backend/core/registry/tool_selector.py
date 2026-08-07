@@ -90,6 +90,16 @@ Rules:
 4. Generate required arguments for the selected tool.
 5. Return JSON only.
 
+You are not solving the user task.
+
+You are only deciding delegation.
+
+If a tool capability matches the task,
+you MUST select the tool.
+
+Do not perform calculations,
+reasoning, summarization, or answers yourself.
+
 Format:
 
 {{
@@ -118,6 +128,11 @@ If no tool is suitable:
 
             None
 
+        )
+
+        print(
+            "TOOL SELECTOR RESPONSE:",
+            response.content
         )
 
 
