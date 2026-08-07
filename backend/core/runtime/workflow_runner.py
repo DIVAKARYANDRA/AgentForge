@@ -65,9 +65,8 @@ class WorkflowRunner:
     ):
 
         """
-        Execute workflow tasks.
+        Execute workflow tasks sequentially.
         """
-
 
         results = []
 
@@ -83,10 +82,24 @@ class WorkflowRunner:
 
             try:
 
+
+                # -----------------------------
+                # Set current task
+                # -----------------------------
+
+                context.set_current_task(
+                    task.description
+                )
+
+
                 task.status = (
                     ExecutionStatus.PROCESSING
                 )
 
+
+                # -----------------------------
+                # Execute task
+                # -----------------------------
 
                 result = await self.execute_task(
 
@@ -97,7 +110,38 @@ class WorkflowRunner:
                 )
 
 
+                # -----------------------------
+                # Store result in context
+                # -----------------------------
+
+                context.add_result(
+                    result
+                )
+
+
+                # -----------------------------
+                # Store task history
+                # -----------------------------
+
+                context.add_task_history(
+
+                    task.task_id,
+
+                    task.description,
+
+                    result,
+
+                    "completed"
+
+                )
+
+
+                # -----------------------------
+                # Memory update
+                # -----------------------------
+
                 if self.memory:
+
 
                     await self.memory.store(
 
@@ -118,17 +162,8 @@ class WorkflowRunner:
                 task.result = result
 
 
-                context.add_result(
-
-                    result
-
-                )
-
-
                 results.append(
-
                     result
-
                 )
 
 
@@ -144,11 +179,26 @@ class WorkflowRunner:
                 task.result = str(error)
 
 
+                context.add_task_history(
+
+                    task.task_id,
+
+                    task.description,
+
+                    str(error),
+
+                    "failed"
+
+                )
+
+
                 results.append(
 
                     {
+
                         "error":
                             str(error)
+
                     }
 
                 )
@@ -304,7 +354,12 @@ Current Task:
 
 Previous Task Results:
 
-{context.previous_results}
+{context.get_history()}
+
+
+Task Execution History:
+
+{context.get_task_history()}
 
 
 Use previous information
