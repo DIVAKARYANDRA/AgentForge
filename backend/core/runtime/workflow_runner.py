@@ -147,7 +147,7 @@ class WorkflowRunner:
 
                         MemoryType.SESSION,
 
-                        "last_execution",
+                        f"task_{task.task_id}"
 
                         result
 
@@ -216,6 +216,8 @@ class WorkflowRunner:
         context
     ):
 
+
+
         """
         Execute individual task.
 
@@ -234,6 +236,33 @@ class WorkflowRunner:
         Result       Gemini
 
         """
+
+        # -----------------------------
+        # Load previous memory context
+        # -----------------------------
+
+        if self.memory:
+
+
+            previous_memory = await self.memory.retrieve(
+
+                MemoryType.SESSION,
+
+                "last_execution"
+
+            )
+
+
+            if previous_memory:
+
+
+                context.add_memory(
+
+                    "previous_execution",
+
+                    previous_memory
+
+                )
 
 
 
@@ -344,32 +373,47 @@ class WorkflowRunner:
         context
     ):
 
+
         prompt = f"""
 
-You are executing an agent task.
-
-Main Goal:
-{context.goal}
+    You are executing an agent task.
 
 
-Current Task:
-{task.description}
+    Main Goal:
+
+    {context.goal}
 
 
-Previous Task Results:
 
-{context.get_history()}
+    Current Task:
 
-
-Task Execution History:
-
-{context.get_task_history()}
+    {task.description}
 
 
-Use previous information
-to complete the current task.
 
-"""
+    Previous Task Results:
+
+    {context.get_history()}
+
+
+
+    Task History:
+
+    {context.get_task_history()}
+
+
+
+    Stored Memory Context:
+
+    {context.memory_context}
+
+
+
+    Use previous information
+    to complete the current task.
+
+
+    """
 
 
         return prompt
