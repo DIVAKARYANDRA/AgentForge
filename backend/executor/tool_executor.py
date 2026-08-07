@@ -43,6 +43,22 @@ class ToolExecutor:
                 .get(tool_name)
             )
 
+            if not self.validate_input(
+                tool,
+                arguments or {}
+            ):
+
+                return {
+
+                    "success": False,
+
+                    "tool_name": tool_name,
+
+                    "error":
+                        "Invalid tool input"
+
+                }
+
 
             result = await tool.execute(
 
@@ -96,6 +112,37 @@ class ToolExecutor:
         if result is None:
 
             return False
+
+
+        return True
+
+    def validate_input(
+        self,
+        tool,
+        arguments
+    ):
+        """
+        Validate tool arguments
+        against tool schema.
+        """
+
+        schema = {}
+
+        if hasattr(tool, "input_schema"):
+
+            schema = tool.input_schema
+
+
+        if not schema:
+
+            return True
+
+
+        for field in schema.keys():
+
+            if field not in arguments:
+
+                return False
 
 
         return True

@@ -130,24 +130,45 @@ class ToolRegistry:
         self
     ):
 
+        """
+        Return complete tool information
+        for AI agents.
+        """
+
+
         metadata = []
 
 
         for name, registration in self._tools.items():
 
+            tool = registration.tool
+
+
             metadata.append({
 
                 "name":
-                    name,
+                    tool.name,
+
 
                 "description":
-                    registration.tool.description,
+                    tool.description,
+
 
                 "capabilities":
-                    registration.tool.capabilities,
+                    getattr(
+                        tool,
+                        "capabilities",
+                        []
+                    ),
+
 
                 "input_schema":
-                    registration.tool.input_schema
+                    getattr(
+                        tool,
+                        "input_schema",
+                        {}
+
+                    )
 
             })
 

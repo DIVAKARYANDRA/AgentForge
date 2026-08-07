@@ -22,7 +22,6 @@ class BaseTool(ABC):
     """
 
 
-
     @property
     @abstractmethod
     def name(self) -> str:
@@ -56,8 +55,7 @@ class BaseTool(ABC):
         """
 
         return {}
-
-
+        
 
     @abstractmethod
     async def execute(
