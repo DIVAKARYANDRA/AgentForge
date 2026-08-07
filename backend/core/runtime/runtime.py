@@ -29,6 +29,10 @@ from core.runtime.workflow_runner import (
 
 from core.memory.memory_types import MemoryType
 
+from core.reflection.reflection_engine import (
+    ReflectionEngine
+)
+
 class RuntimeEngine:
     """
     Executes agent tasks.
@@ -54,6 +58,13 @@ class RuntimeEngine:
         self.tools = tools
 
         self.planner = planner
+
+        self.reflection_engine = ReflectionEngine(
+
+            provider=self.provider
+
+        )
+
 
         self.tool_selector = ToolSelector()
 
@@ -185,6 +196,16 @@ class RuntimeEngine:
                 context
             )
 
+            reflection = await self.reflection_engine.evaluate(
+
+                task.goal,
+
+                result,
+
+                context
+
+            )
+
 
             # Reflection phase
 
@@ -195,11 +216,24 @@ class RuntimeEngine:
             )
 
 
-            self.lifecycle.transition(
+            if reflection.get(
+                "success",
+                True
+            ):
 
-                AgentLifecycleState.COMPLETED
+                self.lifecycle.transition(
 
-            )
+                    AgentLifecycleState.COMPLETED
+
+                )
+
+            else:
+
+                self.lifecycle.transition(
+
+                    AgentLifecycleState.FAILED
+
+                )
 
 
             return {
@@ -221,7 +255,9 @@ class RuntimeEngine:
 
                     "status":
                         "completed",
-
+                    
+                    "reflection":
+                        reflection,
 
                     "result":
                         result
