@@ -20,7 +20,6 @@ from core.runtime import (
 )
 
 
-
 router = APIRouter(
     prefix="/runtime",
     tags=["Runtime"]

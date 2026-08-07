@@ -26,7 +26,9 @@ from core.runtime.task_dispatcher import (
 from core.runtime.workflow_runner import (
     WorkflowRunner
 )
-
+from core.memory.memory_retriever import (
+    MemoryRetriever
+)
 from core.memory.memory_types import MemoryType
 
 from core.reflection.reflection_engine import (
@@ -60,6 +62,8 @@ class RuntimeEngine:
         self.tools = tools
 
         self.planner = planner
+
+        self.memory_retriever = MemoryRetriever()
 
         # Retry control
         self.retry_count = 0
@@ -145,7 +149,19 @@ class RuntimeEngine:
 
                 if history:
 
-                    context.execution_history = history[-5:]
+                    context.execution_history = (
+
+                        self.memory_retriever.retrieve(
+
+                            task.goal,
+
+                            history,
+
+                            limit=3
+
+                        )
+
+                    )
 
 
             plan = None
