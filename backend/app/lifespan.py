@@ -114,7 +114,7 @@ async def lifespan(app: FastAPI):
 
     gemini_selector_config = ProviderConfig(
 
-        name="gemini_selector",
+        name="gemini",
 
         model="gemini-2.0-flash-lite",
 
