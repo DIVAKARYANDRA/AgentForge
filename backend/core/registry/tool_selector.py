@@ -156,7 +156,6 @@ Your response format:
         Convert AI response into ToolDecision.
         """
 
-
         try:
 
             if isinstance(
@@ -169,31 +168,40 @@ Your response format:
 
             else:
 
+                content = response.content.strip()
+
+
+                # Remove markdown code blocks
+
+                if content.startswith(
+                    "```"
+                ):
+
+                    content = (
+                        content
+                        .replace(
+                            "```json",
+                            ""
+                        )
+                        .replace(
+                            "```",
+                            ""
+                        )
+                        .strip()
+                    )
+
+
                 data = json.loads(
-                    response.content
+                    content
                 )
 
-
-            tool_name = data.get(
-                "tool_name"
-            )
-
-
-            # Backward compatibility
-            # remove after migration
-
-            if not tool_name and data.get(
-                "use_tool"
-            ):
-
-                tool_name = data.get(
-                    "tool_name"
-                )
 
 
             return ToolDecision(
 
-                tool_name=tool_name,
+                tool_name=data.get(
+                    "tool_name"
+                ),
 
                 arguments=data.get(
                     "arguments",
@@ -213,14 +221,17 @@ Your response format:
             )
 
 
-        except Exception:
+        except Exception as error:
+
+            print(
+                "TOOL DECISION PARSE ERROR:",
+                error
+            )
 
 
             return ToolDecision(
 
-                use_tool=False,
-
                 reason=
-                "Invalid AI tool decision"
+                f"Invalid AI tool decision: {error}"
 
             )
