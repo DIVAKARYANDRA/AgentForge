@@ -84,14 +84,16 @@ Available Tools:
 
 Rules:
 
-1. Always prefer available tools when the task matches a tool capability.
-2. Do not solve the task yourself if a suitable tool exists.
-3. Never invent tools that are not present in the available tools list.
-4. Generate required arguments for the selected tool.
-5. Return JSON only.
+1. You are NOT the answer generator.
+2. You must ONLY decide tool usage.
+3. If ANY available tool capability matches the user task, select that tool.
+4. Do not solve the task yourself.
+5. Do not reject a tool because the LLM can perform the task.
+6. Never invent tools.
+7. Generate arguments required by the selected tool.
+8. Return JSON only.
 
 You are not solving the user task.
-
 You are only deciding delegation.
 
 If a tool capability matches the task,
@@ -120,6 +122,14 @@ If no tool is suitable:
 }}
 
 """
+
+        print(
+            "AVAILABLE TOOLS:",
+            json.dumps(
+                tool_metadata,
+                indent=2
+            )
+        )
 
 
         response = await self.provider.generate(

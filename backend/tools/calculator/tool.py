@@ -23,12 +23,10 @@ class CalculatorTool(BaseTool):
     def description(self):
 
         return (
-            "A specialized calculation tool. "
-            "Use this tool whenever the task requires "
-            "arithmetic operations, percentages, "
-            "addition, subtraction, multiplication, "
-            "division, or evaluating mathematical expressions."
-
+            "A calculator execution tool. "
+            "Use this tool for arithmetic operations, "
+            "percentage calculations, mathematical expressions, "
+            "addition, subtraction, multiplication, and division."
         )
 
 
