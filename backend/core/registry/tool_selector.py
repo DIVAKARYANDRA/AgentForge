@@ -43,7 +43,7 @@ class ToolSelector:
 
             return ToolDecision(
 
-                use_tool=False,
+                tool_name=None,
 
                 reason=
                 "No provider available"
@@ -169,11 +169,26 @@ Your response format:
                 )
 
 
+            tool_name = data.get(
+                "tool_name"
+            )
+
+
+            # Backward compatibility
+            # remove after migration
+
+            if not tool_name and data.get(
+                "use_tool"
+            ):
+
+                tool_name = data.get(
+                    "tool_name"
+                )
+
+
             return ToolDecision(
 
-                tool_name=data.get(
-                    "tool_name"
-                ),
+                tool_name=tool_name,
 
                 arguments=data.get(
                     "arguments",
