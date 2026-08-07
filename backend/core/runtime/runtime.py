@@ -125,9 +125,6 @@ class RuntimeEngine:
 
                 )
 
-                for planned_task in plan.tasks:
-
-
                 runtime_tasks = []
 
 
@@ -152,7 +149,6 @@ class RuntimeEngine:
                     )
 
             else:
-
 
 
                 runtime_tasks = (
