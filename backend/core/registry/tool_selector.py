@@ -178,11 +178,24 @@ Your response format:
 
 
 
+            tool_name = data.get(
+                "tool_name"
+            )
+
+
+            if not tool_name:
+
+                tool_name = None
+
+
+
             return ToolDecision(
 
-                tool_name=data.get(
-                    "tool_name"
+                use_tool=(
+                    tool_name is not None
                 ),
+
+                tool_name=tool_name,
 
                 arguments=data.get(
                     "arguments",

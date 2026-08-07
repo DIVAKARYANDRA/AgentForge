@@ -257,7 +257,11 @@ class WorkflowRunner:
 
 
 
-            if decision.use_tool:
+            if (
+                decision.use_tool
+                and
+                decision.tool_name
+            ):
 
 
 
