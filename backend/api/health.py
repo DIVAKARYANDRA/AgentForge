@@ -182,7 +182,7 @@ async def gemini_test():
 
         name="gemini",
 
-        model="gemini-1.5-flash",
+        model="gemini-3.6-flash",
 
         api_key=settings.GEMINI_API_KEY
 
