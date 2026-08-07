@@ -111,13 +111,42 @@ Return ONLY JSON:
         except Exception:
 
 
-            return {
+            try:
 
-                "success": True,
+                start = content.find(
+                    "{"
+                )
 
-                "reason":
-                    "Reflection parsing failed",
+                end = content.rfind(
+                    "}"
+                )
 
-                "retry": False
 
-            }
+                if start != -1 and end != -1:
+
+                    json_content = (
+                        content[start:end+1]
+                    )
+
+
+                    return json.loads(
+                        json_content
+                    )
+
+
+            except Exception:
+
+                pass
+
+
+
+        return {
+
+            "success": True,
+
+            "reason":
+                "Unable to parse reflection response",
+
+            "retry": False
+
+        }
