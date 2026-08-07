@@ -35,6 +35,10 @@ from core.reflection.reflection_engine import (
     ReflectionEngine
 )
 
+from core.memory.experience_extractor import (
+    ExperienceExtractor
+)
+
 from core.planner.planner_types import ReplanRequest
 
 class RuntimeEngine:
@@ -76,6 +80,9 @@ class RuntimeEngine:
 
         )
 
+        self.experience_extractor = (
+            ExperienceExtractor()
+        )
 
         self.tool_selector = ToolSelector()
 
@@ -280,6 +287,74 @@ class RuntimeEngine:
                 context
 
             )
+
+            # ----------------------------------
+            # Experience Extraction
+            # ----------------------------------
+
+            experience = self.experience_extractor.extract(
+
+                task.goal,
+
+                result,
+
+                reflection
+
+            )
+
+            print(
+
+                "NEW EXPERIENCE:",
+
+                experience
+
+            )
+
+
+            if self.memory:
+
+                await self.memory.store(
+
+                    MemoryType.SESSION,
+
+                    "last_experience",
+
+                    experience
+
+                )
+
+                experience_history = await self.memory.retrieve(
+
+                    MemoryType.SESSION,
+
+                    "experience_history"
+
+                )
+
+
+                if experience_history is None:
+
+                    experience_history  = []
+
+
+                experience_history.append(
+
+                    experience
+
+                )
+
+
+                await self.memory.store(
+
+                    MemoryType.SESSION,
+
+                    "experience_history",
+
+                    experience_history
+
+                )
+
+            
 
 
             if (
