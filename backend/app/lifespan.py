@@ -105,7 +105,7 @@ async def lifespan(app: FastAPI):
 
         name="gemini",
 
-        model="gemini-2.5-flash",
+        model="gemini-1.5-flash",
 
         api_key=settings.GEMINI_API_KEY
 
@@ -116,7 +116,7 @@ async def lifespan(app: FastAPI):
 
         name="gemini",
 
-        model="gemini-2.5-flash",
+        model="gemini-1.5-flash",
 
         api_key=settings.GEMINI_API_KEY
 
