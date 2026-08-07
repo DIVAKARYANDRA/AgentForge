@@ -59,7 +59,7 @@ class GeminiProvider(BaseProvider):
             self.model.generate_content,
             prompt,
             generation_config={
-                "response_mime_type": "application/json"
+                "temperature":0
             }
         )
 
