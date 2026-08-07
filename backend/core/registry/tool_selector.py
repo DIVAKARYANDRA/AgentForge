@@ -37,6 +37,7 @@ class ToolSelector:
         """
         Ask AI to select best tool.
         """
+        print("TOOL SELECTOR VERSION 2 LOADED")
 
 
         if not self.provider:
@@ -121,6 +122,10 @@ Your response format:
             )
         )
 
+
+        print("================ TOOL SELECTOR PROMPT ================")
+        print(prompt)
+        print("======================================================")
 
         response = await self.provider.generate(
 
