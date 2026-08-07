@@ -54,10 +54,20 @@ class ToolSelector:
 
         prompt = f"""
 
-You are a tool selection agent.
+You are an AI agent tool planner.
 
-Your job is to decide whether
-a tool is required.
+Your responsibility is to decide
+whether the agent should delegate
+the task to an available tool.
+
+Tools are preferred for:
+- calculations
+- data processing
+- external actions
+- specialized operations
+
+Do not answer the user directly.
+Only decide tool usage.
 
 User Task:
 
@@ -74,9 +84,11 @@ Available Tools:
 
 Rules:
 
-1. Select a tool only if it helps complete the task.
-2. Do not invent tools.
-3. Return JSON only.
+1. Always prefer available tools when the task matches a tool capability.
+2. Do not solve the task yourself if a suitable tool exists.
+3. Never invent tools that are not present in the available tools list.
+4. Generate required arguments for the selected tool.
+5. Return JSON only.
 
 Format:
 
