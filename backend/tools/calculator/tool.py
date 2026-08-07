@@ -7,7 +7,7 @@ Provides safe mathematical execution.
 
 import ast
 import operator
-
+from core.base.tool_result import ToolResult
 
 from core.base.base_tool import BaseTool
 
@@ -96,33 +96,48 @@ class CalculatorTool(BaseTool):
             )
 
 
-            return {
+            return ToolResult(
 
-                "success": True,
+                success=True,
 
-                "expression":
-                    expression,
+                tool_name=self.name,
 
-                "value":
-                    value
+                input={
 
-            }
+                    "expression":
+                        expression
+
+                },
+
+                output={
+
+                    "value":
+                        value
+
+                }
+
+            )
 
 
         except Exception as error:
 
 
-            return {
+            return ToolResult(
 
-                "success": False,
+                success=False,
 
-                "expression":
-                    expression,
+                tool_name=self.name,
 
-                "error":
-                    str(error)
+                input={
 
-            }
+                    "expression":
+                        expression
+
+                },
+
+                error=str(error)
+
+            )
 
 
 

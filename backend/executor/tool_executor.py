@@ -70,15 +70,7 @@ class ToolExecutor:
 
 
 
-            return {
-
-                "success": True,
-
-                "tool": tool_name,
-
-                "result": result
-
-            }
+            return result
 
 
         except Exception as error:
