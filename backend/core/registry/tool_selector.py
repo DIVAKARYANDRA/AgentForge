@@ -171,26 +171,23 @@ Your response format:
 
             return ToolDecision(
 
-                use_tool=data.get(
-                    "use_tool",
-                    False
-                ),
-
-
                 tool_name=data.get(
                     "tool_name"
                 ),
-
 
                 arguments=data.get(
                     "arguments",
                     {}
                 ),
 
-
                 reason=data.get(
                     "reason",
                     ""
+                ),
+
+                confidence=data.get(
+                    "confidence",
+                    0.0
                 )
 
             )
