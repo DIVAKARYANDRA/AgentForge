@@ -68,8 +68,7 @@ class MemoryRetriever:
 
         )
 
-
-        return [
+        relevant = [
 
             item
 
@@ -78,3 +77,10 @@ class MemoryRetriever:
             in scored[:limit]
 
         ]
+
+        print(
+            "RELEVANT MEMORIES:",
+            [item["goal"] for item in relevant]
+        )
+
+        return relevant
