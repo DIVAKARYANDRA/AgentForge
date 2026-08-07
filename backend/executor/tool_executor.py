@@ -27,7 +27,7 @@ class ToolExecutor:
     async def execute(
         self,
         tool_name,
-        task,
+        context,
         arguments=None
     ):
 
@@ -46,7 +46,7 @@ class ToolExecutor:
 
             result = await tool.execute(
 
-                task.context,
+                context,
 
                 **(
                     arguments or {}
@@ -54,14 +54,14 @@ class ToolExecutor:
 
             )
 
+
             if not self.validate_result(result):
 
                 return {
 
                     "success": False,
 
-                    "tool":
-                        tool_name,
+                    "tool": tool_name,
 
                     "error":
                         "Invalid tool response"
@@ -74,11 +74,9 @@ class ToolExecutor:
 
                 "success": True,
 
-                "tool":
-                    tool_name,
+                "tool": tool_name,
 
-                "result":
-                    result
+                "result": result
 
             }
 
@@ -90,11 +88,9 @@ class ToolExecutor:
 
                 "success": False,
 
-                "tool":
-                    tool_name,
+                "tool": tool_name,
 
-                "error":
-                    str(error)
+                "error": str(error)
 
             }
 

@@ -230,7 +230,7 @@ class WorkflowRunner:
 
                     decision.tool_name,
 
-                    task,
+                    context,
 
                     decision.arguments
 
