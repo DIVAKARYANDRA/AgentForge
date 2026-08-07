@@ -78,9 +78,4 @@ class MemoryRetriever:
 
         ]
 
-        print(
-            "RELEVANT MEMORIES:",
-            [item["goal"] for item in relevant]
-        )
-
         return relevant

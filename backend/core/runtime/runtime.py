@@ -39,6 +39,10 @@ from core.memory.experience_extractor import (
     ExperienceExtractor
 )
 
+from core.memory.knowledge_promoter import (
+    KnowledgePromoter
+)
+
 from core.planner.planner_types import ReplanRequest
 
 class RuntimeEngine:
@@ -85,6 +89,10 @@ class RuntimeEngine:
         )
 
         self.tool_selector = ToolSelector()
+
+        self.knowledge_promoter = (
+            KnowledgePromoter()
+        )
 
 
         self.lifecycle = (
@@ -302,15 +310,6 @@ class RuntimeEngine:
 
             )
 
-            print(
-
-                "NEW EXPERIENCE:",
-
-                experience
-
-            )
-
-
             if self.memory:
 
                 await self.memory.store(
@@ -328,6 +327,24 @@ class RuntimeEngine:
                     MemoryType.SESSION,
 
                     "experience_history"
+
+                )
+
+                knowledge = (
+
+                    self.knowledge_promoter.promote(
+
+                        experience_history
+
+                    )
+
+                )
+
+                print(
+
+                    "KNOWLEDGE BASE:",
+
+                    knowledge
 
                 )
 
@@ -351,6 +368,16 @@ class RuntimeEngine:
                     "experience_history",
 
                     experience_history
+
+                )
+
+                await self.memory.store(
+
+                    MemoryType.KNOWLEDGE,
+
+                    "knowledge_base",
+
+                    knowledge
 
                 )
 
