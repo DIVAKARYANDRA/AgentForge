@@ -59,6 +59,11 @@ class RuntimeEngine:
 
         self.planner = planner
 
+        # Retry control
+        self.retry_count = 0
+
+        self.max_retries = 3
+
         self.reflection_engine = ReflectionEngine(
 
             provider=self.provider
@@ -102,6 +107,8 @@ class RuntimeEngine:
         """
 
         self.lifecycle = AgentLifecycleManager()
+
+        self.retry_count = 0
 
 
 
@@ -207,6 +214,57 @@ class RuntimeEngine:
             )
 
 
+            if (
+                reflection.get("retry")
+                and
+                self.retry_count < self.max_retries
+            ):
+
+                self.retry_count += 1
+
+                replan_request = ReplanRequest(
+
+                    failed_task_id=
+                        task.task_id,
+
+                    reason=
+                        reflection.get(
+                            "reason"
+                        ),
+
+                    previous_result=result
+
+                )
+
+
+                recovery_plan = (
+                    self.planner.replanner.replan(
+                        replan_request
+                    )
+                )
+
+
+                if recovery_plan.success:
+
+                    for retry_task in recovery_plan.new_tasks:
+
+                        self.dispatcher.add_task(
+                            retry_task
+                        )
+
+
+                    retry_result = await (
+                        self.workflow_runner.run(
+                            context
+                        )
+                    )
+
+
+                    result.extend(
+                        retry_result
+                    )
+
+
             # Reflection phase
 
             self.lifecycle.transition(
@@ -255,6 +313,9 @@ class RuntimeEngine:
 
                     "status":
                         "completed",
+
+                    "retry_count":
+                        self.retry_count,
                     
                     "reflection":
                         reflection,

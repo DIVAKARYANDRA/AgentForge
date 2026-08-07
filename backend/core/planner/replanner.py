@@ -18,35 +18,23 @@ class Replanner:
     """
 
 
-
     def replan(
         self,
         request
     ) -> ReplanResult:
 
-        """
-        Generate recovery plan.
-        """
 
-
-        failed_task = (
-            request.failed_task_id
-        )
-
-
-        reason = request.reason
-
-
-
-        alternative_task = PlannedTask(
+        retry_task = PlannedTask(
 
             task_id=
-            f"retry_{failed_task}",
+                f"retry_{request.failed_task_id}",
+
 
             description=
-            self.generate_alternative(
-                reason
-            ),
+                self.generate_alternative(
+                    request.reason
+                ),
+
 
             priority=1
 
@@ -57,13 +45,14 @@ class Replanner:
 
             success=True,
 
+
             new_tasks=[
-                alternative_task
+                retry_task
             ],
 
+
             explanation=
-            "Created alternative task "
-            "after failure"
+            "Generated recovery task"
 
         )
 
@@ -71,29 +60,17 @@ class Replanner:
 
     def generate_alternative(
         self,
-        reason:str
+        reason
     ):
 
 
-        reason = reason.lower()
+        return f"""
+Retry the failed task with an improved strategy.
 
+Previous failure reason:
 
+{reason}
 
-        if "search" in reason:
-
-            return (
-                "Use available knowledge "
-                "sources instead of search"
-            )
-
-
-        if "tool" in reason:
-
-            return (
-                "Retry using alternative tool"
-            )
-
-
-        return (
-            "Retry task with modified strategy"
-        )
+Analyze the previous failure
+and attempt a better solution.
+"""
