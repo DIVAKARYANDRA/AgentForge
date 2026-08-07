@@ -390,6 +390,11 @@ class WorkflowRunner:
     {task.description}
 
 
+    Previous Related Executions:
+
+    {context.execution_history}
+
+
 
     Previous Task Results:
 

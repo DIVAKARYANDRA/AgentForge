@@ -133,11 +133,24 @@ class RuntimeEngine:
 
             )
 
+            if self.memory:
+
+                history = await self.memory.retrieve(
+
+                    MemoryType.SESSION,
+
+                    "execution_history"
+
+                )
+
+                if history:
+
+                    context.execution_history = history[-5:]
+
+
             plan = None
 
             if self.planner:
-
-
 
                 plan = self.planner.create_plan(
 
@@ -204,6 +217,43 @@ class RuntimeEngine:
             result = await self.workflow_runner.run(
                 context
             )
+
+            if self.memory:
+
+                history = await self.memory.retrieve(
+
+                    MemoryType.SESSION,
+
+                    "execution_history"
+
+                )
+
+
+                if history is None:
+
+                    history = []
+
+
+                history.append({
+
+                    "goal":
+                        task.goal,
+
+                    "result":
+                        result
+
+                })
+
+
+                await self.memory.store(
+
+                    MemoryType.SESSION,
+
+                    "execution_history",
+
+                    history
+
+                )
 
             reflection = await self.reflection_engine.evaluate(
 

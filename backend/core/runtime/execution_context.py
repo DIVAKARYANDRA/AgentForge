@@ -37,6 +37,10 @@ class ExecutionContext:
         default_factory=list
     )
 
+    execution_history: List[Any] = field(
+        default_factory=list
+    )
+
 
 
     # Completed task tracking
