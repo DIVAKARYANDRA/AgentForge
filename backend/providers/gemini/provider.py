@@ -56,11 +56,11 @@ class GeminiProvider(BaseProvider):
 
 
         response = await asyncio.to_thread(
-
             self.model.generate_content,
-
-            prompt
-
+            prompt,
+            generation_config={
+                "response_mime_type": "application/json"
+            }
         )
 
 

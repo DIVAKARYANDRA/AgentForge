@@ -52,7 +52,7 @@ class CalculatorTool(BaseTool):
         return {
 
             "expression":
-                "Mathematical expression to evaluate"
+                "Expression such as 800*0.25"
 
         }
 
