@@ -40,6 +40,7 @@ class RuntimeEngine:
         self,
         memory=None,
         provider=None,
+        tool_provider=None,
         tools=None,
         planner=None
     ):
@@ -47,6 +48,8 @@ class RuntimeEngine:
         self.memory = memory
 
         self.provider = provider
+
+        self.tool_provider = tool_provider
 
         self.tools = tools
 
