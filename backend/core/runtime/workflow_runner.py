@@ -147,7 +147,7 @@ class WorkflowRunner:
 
                         MemoryType.SESSION,
 
-                        f"task_{task.task_id}"
+                        f"task_{task.task_id}",
 
                         result
 
