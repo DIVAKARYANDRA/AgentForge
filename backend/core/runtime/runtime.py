@@ -117,7 +117,7 @@ class RuntimeEngine:
 
             if self.planner:
 
-                 print(
+                print(
                     "RUNTIME ORIGINAL GOAL:",
                     task.goal
                 )
