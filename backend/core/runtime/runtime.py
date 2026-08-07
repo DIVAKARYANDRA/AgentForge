@@ -33,6 +33,8 @@ from core.reflection.reflection_engine import (
     ReflectionEngine
 )
 
+from core.planner import ReplanRequest
+
 class RuntimeEngine:
     """
     Executes agent tasks.

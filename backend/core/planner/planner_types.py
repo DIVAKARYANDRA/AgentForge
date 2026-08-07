@@ -14,6 +14,11 @@ from dataclasses import dataclass, field
 
 from typing import Dict, List, Any
 
+from core.planner import (
+    ReplanRequest,
+    ReplanResult
+)
+
 
 
 class PlanStatus(str, Enum):
