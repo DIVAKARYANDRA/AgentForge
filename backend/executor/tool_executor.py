@@ -4,7 +4,8 @@ AgentForge Tool Executor.
 Responsible for executing tools
 selected by agents.
 """
-
+import time
+from core.tools.tool_result import ToolResult
 
 class ToolExecutor:
     """
@@ -60,13 +61,23 @@ class ToolExecutor:
                 }
 
 
+            start = time.perf_counter()
+
             result = await tool.execute(
 
                 context,
 
-                **(
-                    arguments or {}
-                )
+                **(arguments or {})
+
+            )
+
+            elapsed = time.perf_counter() - start
+
+            result.execution_time = elapsed
+
+            result.logs.append(
+
+                f"{tool_name} executed successfully"
 
             )
 
@@ -92,15 +103,15 @@ class ToolExecutor:
         except Exception as error:
 
 
-            return {
+            return ToolResult(
 
-                "success": False,
+                success=False,
 
-                "tool": tool_name,
+                tool_name=tool_name,
 
-                "error": str(error)
+                error=str(error)
 
-            }
+            )
 
 
 

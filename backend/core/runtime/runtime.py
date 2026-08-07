@@ -340,14 +340,6 @@ class RuntimeEngine:
 
                 )
 
-                print(
-
-                    "KNOWLEDGE BASE:",
-
-                    knowledge
-
-                )
-
 
                 if experience_history is None:
 

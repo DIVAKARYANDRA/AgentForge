@@ -7,12 +7,11 @@ Provides safe mathematical execution.
 
 import ast
 import operator
-from core.base.tool_result import ToolResult
 
 from core.base.base_tool import BaseTool
 
 from core.base.base_types import ExecutionContext
-
+from core.tools.tool_result import ToolResult
 
 
 class CalculatorTool(BaseTool):
@@ -79,14 +78,15 @@ class CalculatorTool(BaseTool):
 
         if not expression:
 
-            return {
+            return ToolResult(
 
-                "success": False,
+                success=False,
 
-                "error":
-                "Expression missing"
+                tool_name=self.name,
 
-            }
+                error="Expression missing"
+
+            )
 
 
         try:
