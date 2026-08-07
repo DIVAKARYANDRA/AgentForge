@@ -33,7 +33,7 @@ from core.reflection.reflection_engine import (
     ReflectionEngine
 )
 
-from core.planner import ReplanRequest
+from core.planner.planner_types import ReplanRequest
 
 class RuntimeEngine:
     """
