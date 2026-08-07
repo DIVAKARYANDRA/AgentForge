@@ -12,7 +12,7 @@ from enum import Enum
 from dataclasses import dataclass, field
 
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 
 class PlanStatus(str, Enum):
@@ -149,6 +149,7 @@ class ReplanRequest:
 
     failed_task_id: str
 
+    previous_result: Optional[Any] = None
 
     metadata: Dict[str, Any] = field(
         default_factory=dict
