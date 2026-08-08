@@ -79,10 +79,13 @@ async def lifespan(app: FastAPI):
 
     tool_registry = ToolRegistry()
 
-    calculator = CalculatorTool()
+    tool_registry.discover_tools()
 
-    tool_registry.register(
-        calculator
+    health = await tool_registry.health_status()
+
+    print(
+        "TOOL HEALTH:",
+        health
     )
 
     print(

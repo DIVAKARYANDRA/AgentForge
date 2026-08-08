@@ -232,3 +232,18 @@ class CalculatorTool(BaseTool):
     def category(self):
 
         return "math"
+
+
+    async def health_check(
+        self
+    ):
+
+        return {
+
+            "healthy": True,
+
+            "message":
+                "Calculator ready"
+
+        }
+

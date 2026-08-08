@@ -74,3 +74,12 @@ class BaseTool(ABC):
         Tool category.
         """
         ...
+
+    @abstractmethod
+    async def health_check(
+        self
+    ):
+        """
+        Verify the tool is operational.
+        """
+        ...
