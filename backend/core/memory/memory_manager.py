@@ -11,6 +11,9 @@ from typing import Dict, Any
 from core.memory import (
     MemoryType
 )
+from core.persistence import (
+    PersistenceManager
+)
 
 
 class MemoryManager:
@@ -26,6 +29,8 @@ class MemoryManager:
             MemoryType,
             Any
         ] = {}
+
+        self.persistence = PersistenceManager()
 
 
 
@@ -90,6 +95,20 @@ class MemoryManager:
             value
         )
 
+        repository_key = (
+
+            f"{memory_type.value}:{key}"
+
+        )
+
+        self.persistence.save(
+
+            repository_key,
+
+            value
+
+        )
+
 
 
     async def retrieve(
@@ -106,8 +125,22 @@ class MemoryManager:
         )
 
 
-        return await memory.retrieve(
+        value = await memory.retrieve(
             key
+        )
+
+        if value is not None:
+
+            return value
+
+        repository_key = (
+
+            f"{memory_type.value}:{key}"
+
+        )
+
+        return self.persistence.get(
+            repository_key
         )
 
 
@@ -141,3 +174,109 @@ class MemoryManager:
             for memory in self.memories.keys()
 
         ]
+
+    async def restore_session(
+        self
+    ):
+
+        records = self.persistence.all()
+
+        for key, value in records.items():
+
+            if not key.startswith(
+
+                "session:"
+
+            ):
+
+                continue
+
+            session_key = key.replace(
+
+                "session:",
+
+                ""
+
+            )
+
+            session = self.memories.get(
+
+                MemoryType.SESSION
+
+            )
+
+            if session:
+
+                await session.store(
+
+                    session_key,
+
+                    value
+
+                )
+
+    async def restore_knowledge(
+        self
+    ):
+
+        records = self.persistence.all()
+
+        for key, value in records.items():
+
+            if not key.startswith(
+
+                "knowledge:"
+
+            ):
+
+                continue
+
+            knowledge_key = key.replace(
+
+                "knowledge:",
+
+                ""
+
+            )
+
+            memory = self.memories.get(
+
+                MemoryType.KNOWLEDGE
+
+            )
+
+            if memory:
+
+                await memory.store(
+
+                    knowledge_key,
+
+                    value
+
+                )
+
+    async def restore(
+        self
+    ):
+
+        await self.restore_session()
+
+        await self.restore_knowledge()
+
+
+    @property
+    def persistence_status(
+        self
+    ):
+
+        return {
+
+            "records":
+
+                len(
+
+                    self.persistence.all()
+
+                )
+
+        }

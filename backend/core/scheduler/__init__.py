@@ -9,3 +9,7 @@ from .scheduler_engine import (
 from .scheduler_manager import (
     SchedulerManager
 )
+
+from .scheduler_repository import (
+    SchedulerRepository
+)

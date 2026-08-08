@@ -1,0 +1,13 @@
+"""
+Current Request User Context.
+"""
+
+from contextvars import ContextVar
+
+current_user = ContextVar(
+
+    "current_user",
+
+    default=None
+
+)

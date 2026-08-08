@@ -16,6 +16,7 @@ class QueueManager:
         self.queue = TaskQueue()
         self.worker = None
         self.repository = TaskRepository()
+        self.repository.restore()
 
 
     def submit(
@@ -130,6 +131,14 @@ class QueueManager:
 
             "worker_busy":
 
-                self.worker_busy
+                self.worker_busy,
+
+            "persisted_tasks":
+
+                len(
+
+                    self.repository.all()
+
+                )
 
         }

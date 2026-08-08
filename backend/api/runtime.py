@@ -5,7 +5,9 @@ Runtime execution API.
 
 from fastapi import APIRouter
 
-
+from core.api import (
+    ApiResponse
+)
 from core.container import (
     get_dependency,
     DependencyType
@@ -58,11 +60,11 @@ async def execute_agent(
     )
 
 
-    return {
+    return ApiResponse(
 
-        "result":result
+        data=result
 
-    }
+    ).to_dict()
 
 
 @router.get("/health")

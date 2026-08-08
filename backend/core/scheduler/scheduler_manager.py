@@ -5,7 +5,9 @@ Scheduler Manager.
 from core.scheduler import (
     SchedulerEngine
 )
-
+from core.scheduler import (
+    SchedulerRepository
+)
 
 class SchedulerManager:
 
@@ -23,10 +25,18 @@ class SchedulerManager:
 
         )
 
+        self.repository = SchedulerRepository()
+
+        self.repository.restore()
+
     def schedule(
         self,
         job
     ):
+
+        self.repository.save(
+            job
+        )
 
         self.engine.register(
             job
@@ -38,6 +48,10 @@ class SchedulerManager:
     ):
 
         self.engine.remove(
+            job_id
+        )
+
+        self.repository.delete(
             job_id
         )
 
@@ -145,9 +159,7 @@ class SchedulerManager:
 
     @property
     def summary(
-
         self
-
     ):
 
         return {
@@ -157,6 +169,59 @@ class SchedulerManager:
                 len(
 
                     self.engine.jobs
+
+                ),
+
+            "persisted_jobs":
+
+                len(
+
+                    self.repository.jobs
+
+                ),
+
+            "running":
+
+                self.engine.running,
+
+            "healthy": True
+
+        }
+
+    def job(
+        self,
+        job_id
+    ):
+
+        return self.repository.get(
+            job_id
+        )
+
+    @property
+    def all_jobs(
+        self
+    ):
+
+        return list(
+
+            self.repository.jobs.values()
+
+        )
+
+    @property
+    def health(
+        self
+    ):
+
+        return {
+
+            "healthy": True,
+
+            "registered_jobs":
+
+                len(
+
+                    self.repository.jobs
 
                 ),
 

@@ -6,7 +6,6 @@ AgentForge Application Lifespan.
 from contextlib import asynccontextmanager
 from core.registry import ToolRegistry
 from fastapi import FastAPI
-from tools.calculator.tool import CalculatorTool
 import logging
 from core.providers import (
     ProviderManager,
@@ -17,6 +16,7 @@ from app.state import state
 from core.providers.provider_roles import (
     ProviderRole
 )
+from core.logging import LogManager
 
 from core.container import (
 
@@ -40,6 +40,9 @@ from core.memory import (
     LongTermMemory,
     KnowledgeMemory
 )
+from core.security import (
+    AuthenticationManager
+)
 
 from core.runtime import (
     RuntimeManager
@@ -51,6 +54,9 @@ from api.mission_control.service import (
     MissionControlService
 )
 
+from app.bootstrap import (
+    ApplicationBootstrap
+)
 import api.mission_control.router as mission_router
 
 logger = logging.getLogger(__name__)
@@ -68,6 +74,11 @@ async def lifespan(app: FastAPI):
 
 
     container = Container()
+    bootstrap = ApplicationBootstrap()
+    auth_manager = AuthenticationManager()
+    log_manager = LogManager()
+
+
 
     container.register(
         DependencyType.CONFIG,
@@ -88,16 +99,27 @@ async def lifespan(app: FastAPI):
 
     health = await tool_registry.health_status()
 
-    print(
-        "TOOL HEALTH:",
-        health
+    log_manager.info(
+
+        module="tool_registry",
+
+        event="health_check",
+
+        message="Tool health checked",
+
+        health=health
+
     )
 
-    print(
+    log_manager.info(
 
-        "REGISTERED CATEGORIES:",
+        module="tool_registry",
 
-        tool_registry.list_categories()
+        event="discovery",
+
+        message="Tools discovered",
+
+        categories=tool_registry.list_categories()
 
     )
 
@@ -279,6 +301,11 @@ async def lifespan(app: FastAPI):
 
     )
 
+    bootstrap.register(
+        "runtime",
+        runtime_manager
+    )
+
     # ---------------------------------
     # Mission Control Initialization
     # ---------------------------------
@@ -296,10 +323,6 @@ async def lifespan(app: FastAPI):
         event_manager=None
 
     )
-
-
-
-
 
 
     memory_manager.register_memory(
@@ -338,6 +361,8 @@ async def lifespan(app: FastAPI):
 
     )
 
+    await memory_manager.restore()
+
     container.register(
 
         DependencyType.MEMORY,
@@ -354,8 +379,54 @@ async def lifespan(app: FastAPI):
 
     )
 
+    bootstrap.register(
+        "memory",
+        memory_manager
+    )
+
+    bootstrap.register(
+        "provider",
+        provider_manager
+    )
+
+    bootstrap.register(
+        "tool_registry",
+        tool_registry
+    )
+
+    bootstrap.register(
+        "planner",
+        planner
+    )
+
+    bootstrap.register(
+        "memory_service",
+        memory_service
+    )
+
+    bootstrap.register(
+        "auth",
+        auth_manager
+    )
+
+    container.register(
+        DependencyType.AUTH,
+        auth_manager
+    )
+
+    bootstrap.register(
+        "log_manager",
+        log_manager
+    )
+
+    container.register(
+        DependencyType.LOG_MANAGER,
+        log_manager
+    )
 
 
+
+    state.bootstrap = bootstrap
     state.container = container
 
 
@@ -379,11 +450,13 @@ async def lifespan(app: FastAPI):
 
     yield
 
-
-
     logger.info(
         "Stopping AgentForge..."
     )
 
+    memory_manager.persistence.close()
 
+
+    state.bootstrap = None
     state.container = None
+
