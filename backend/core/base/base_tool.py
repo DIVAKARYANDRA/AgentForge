@@ -55,7 +55,7 @@ class BaseTool(ABC):
         """
 
         return {}
-        
+
 
     @abstractmethod
     async def execute(
@@ -66,3 +66,11 @@ class BaseTool(ABC):
         """
         Execute the tool.
         """
+
+    @property
+    @abstractmethod
+    def category(self) -> str:
+        """
+        Tool category.
+        """
+        ...

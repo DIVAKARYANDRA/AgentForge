@@ -30,6 +30,8 @@ class ToolRegistry:
             ToolRegistration
         ] = {}
 
+        self.categories = {}
+
 
 
     def register(
@@ -49,6 +51,13 @@ class ToolRegistry:
 
             tool=tool
 
+        )
+
+        if tool.category not in self.categories:
+            self.categories[tool.category] = []
+
+        self.categories[tool.category].append(
+            tool.name
         )
 
 
@@ -168,9 +177,37 @@ class ToolRegistry:
                         "input_schema",
                         {}
 
-                    )
+                    ),
+
+                "category": tool.category
 
             })
 
 
         return metadata
+
+    def get_tools_by_category(
+        self,
+        category: str
+    ):
+
+        tool_names = self.categories.get(
+            category,
+            []
+        )
+
+        return [
+
+            self.tools[name]
+
+            for name in tool_names
+
+        ]
+
+    def list_categories(self):
+
+        return list(
+
+            self.categories.keys()
+
+        )

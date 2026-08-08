@@ -227,3 +227,8 @@ class CalculatorTool(BaseTool):
         return evaluate(
             tree.body
         )
+
+    @property
+    def category(self):
+
+        return "math"

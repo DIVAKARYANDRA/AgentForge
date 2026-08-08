@@ -85,6 +85,32 @@ async def lifespan(app: FastAPI):
         calculator
     )
 
+    print(
+
+        "REGISTERED CATEGORIES:",
+
+        tool_registry.list_categories()
+
+    )
+
+    print(
+
+        "MATH TOOLS:",
+
+        [
+
+            tool.name
+
+            for tool in tool_registry.get_tools_by_category(
+
+                "math"
+
+            )
+
+        ]
+
+    )
+
 
     container.register(
 
