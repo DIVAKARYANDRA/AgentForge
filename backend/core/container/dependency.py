@@ -30,3 +30,7 @@ class DependencyType(str, Enum):
     AGENT = "agent"
 
     MEMORY_SERVICE = "memory_service"
+
+    AUTH = "auth"
+
+    LOG_MANAGER = "log_manager"
