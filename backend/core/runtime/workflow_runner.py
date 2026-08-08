@@ -299,6 +299,8 @@ class WorkflowRunner:
             # Execute all selected tools
             # ---------------------------------
 
+            results = []
+
             for decision in tool_decisions:
 
                 tool_name = decision.tool_name
@@ -345,24 +347,35 @@ class WorkflowRunner:
                 )
 
 
-                return {
+                results.append(
 
-                    "type":
-                        "tool_execution",
+                    {
 
+                        "type":
+                            "tool_execution",
 
-                    "tool":
-                        decision.tool_name,
+                        "tool":
+                            tool_name,
 
+                        "reason":
+                            getattr(
 
-                    "reason":
-                        decision.reason,
+                                decision,
 
+                                "reason",
 
-                    "result":
-                        tool_result
+                                ""
 
-                }
+                            ),
+
+                        "result":
+                            tool_result
+
+                    }
+
+                )
+
+            return results
 
 
 

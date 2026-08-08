@@ -2,7 +2,7 @@ import httpx
 
 from core.base.base_tool import BaseTool
 from core.base.base_types import ExecutionContext
-from core.base.tool_result import ToolResult
+from core.tools.tool_result import ToolResult
 
 
 class HttpClientTool(BaseTool):
@@ -78,6 +78,7 @@ class HttpClientTool(BaseTool):
                 output={
 
                     "status_code": response.status_code,
+                    "headers": dict(response.headers),
 
                     "content": response.text[:5000]
 

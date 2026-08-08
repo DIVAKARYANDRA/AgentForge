@@ -2,7 +2,7 @@ from pathlib import Path
 
 from core.base.base_tool import BaseTool
 from core.base.base_types import ExecutionContext
-from core.base.tool_result import ToolResult
+from core.tools.tool_result import ToolResult
 
 
 class FileWriterTool(BaseTool):
