@@ -19,7 +19,10 @@ from executor.tool_executor import (
 from core.registry.tool_selector import (
     ToolSelector
 )
-
+from core.events import (
+    EventBuilder,
+    EventType
+)
 
 class WorkflowRunner:
     """
@@ -34,7 +37,8 @@ class WorkflowRunner:
         provider=None,
         tool_provider=None,
         memory=None,
-        tools=None
+        tools=None,
+        event_manager=None
     ):
 
         self.dispatcher = dispatcher
@@ -48,6 +52,10 @@ class WorkflowRunner:
         self.tool_selector = ToolSelector(
             tool_provider
         )
+
+        self.event_manager = event_manager
+
+        self.event_builder = EventBuilder()
 
         self.tool_executor = None
 
@@ -316,6 +324,26 @@ class WorkflowRunner:
 
                 )
 
+                if self.event_manager:
+
+                    await self.event_manager.publish(
+
+                        self.event_builder.create(
+
+                            EventType.TOOL_STARTED,
+
+                            source=tool_name,
+
+                            payload={
+
+                                "tool": tool_name
+
+                            }
+
+                        )
+
+                    )
+
                 tool_result = await self.tool_executor.execute(
 
                     tool_name,
@@ -325,6 +353,28 @@ class WorkflowRunner:
                     decision.arguments
 
                 )
+
+                if self.event_manager:
+
+                    await self.event_manager.publish(
+
+                        self.event_builder.create(
+
+                            EventType.TOOL_COMPLETED,
+
+                            source=tool_name,
+
+                            payload={
+
+                                "tool": tool_name,
+
+                                "success": tool_result.success
+
+                            }
+
+                        )
+
+                    )
 
                 context.store_tool_output(
 

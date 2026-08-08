@@ -6,6 +6,11 @@ Executes registered workflows.
 
 from core.workflow import Workflow
 
+from core.events import (
+    EventBuilder,
+    EventType
+)
+
 
 class WorkflowExecutor:
     """
@@ -14,12 +19,15 @@ class WorkflowExecutor:
 
     def __init__(
         self,
-        workflow_runner
+        workflow_runner,
+        event_manager=None
     ):
 
         self.workflow_runner = (
             workflow_runner
         )
+
+        self.event_manager = event_manager
 
         from core.workflow import (
             ConditionEvaluator
@@ -28,6 +36,8 @@ class WorkflowExecutor:
         self.condition_evaluator = (
             ConditionEvaluator()
         )
+
+        self.event_builder = EventBuilder()
 
 
     async def execute(
@@ -39,42 +49,116 @@ class WorkflowExecutor:
         Execute workflow.
         """
 
+        if self.event_manager:
+
+            await self.event_manager.publish(
+
+                self.event_builder.create(
+
+                    EventType.WORKFLOW_STARTED,
+
+                    source="workflow",
+
+                    payload={
+
+                        "workflow":
+                            workflow.name
+
+                    }
+
+                )
+
+            )
+
         results = []
 
-        for step in workflow.steps:
+        try:
 
-            if not step.enabled:
+            for step in workflow.steps:
 
-                continue
+                if not step.enabled:
 
-            if not self.condition_evaluator.evaluate(
+                    continue
 
-                step.condition,
+                if not self.condition_evaluator.evaluate(
 
-                context
+                    step.condition,
 
-            ):
+                    context
 
-                continue
+                ):
 
-            result = await self.workflow_runner.run_step(
+                    continue
 
-                step,
+                result = await self.workflow_runner.run_step(
 
-                context
+                    step,
 
-            )
+                    context
 
-            results.append(
+                )
 
-                {
+                results.append(
 
-                    "step": step.name,
+                    {
 
-                    "result": result
+                        "step":
+                            step.name,
 
-                }
+                        "result":
+                            result
 
-            )
+                    }
 
-        return results
+                )
+
+            if self.event_manager:
+
+                await self.event_manager.publish(
+
+                    self.event_builder.create(
+
+                        EventType.WORKFLOW_COMPLETED,
+
+                        source="workflow",
+
+                        payload={
+
+                            "workflow":
+                                workflow.name
+
+                        }
+
+                    )
+
+                )
+
+            return results
+
+        except Exception as error:
+
+            if self.event_manager:
+
+                await self.event_manager.publish(
+
+                    self.event_builder.create(
+
+                        EventType.WORKFLOW_FAILED,
+
+                        source="workflow",
+
+                        payload={
+
+                            "workflow":
+                                workflow.name,
+
+                            "error":
+                                str(error)
+
+                        }
+
+                    )
+
+                )
+
+            raise

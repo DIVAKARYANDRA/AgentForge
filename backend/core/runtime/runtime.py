@@ -43,6 +43,11 @@ from core.memory.knowledge_promoter import (
     KnowledgePromoter
 )
 
+from core.events import (
+    EventBuilder,
+    EventType
+)
+
 from core.planner.planner_types import ReplanRequest
 
 class RuntimeEngine:
@@ -58,7 +63,8 @@ class RuntimeEngine:
         provider=None,
         tool_provider=None,
         tools=None,
-        planner=None
+        planner=None,
+        event_manager=None
     ):
 
         self.memory = memory
@@ -103,6 +109,10 @@ class RuntimeEngine:
             TaskDispatcher()
         )
 
+        self.event_manager = event_manager
+
+        self.event_builder = EventBuilder()
+
         self.workflow_runner = WorkflowRunner(
 
             self.dispatcher,
@@ -113,7 +123,9 @@ class RuntimeEngine:
 
             memory=self.memory,
 
-            tools=self.tools
+            tools=self.tools,
+
+            event_manager=self.event_manager
 
         )
 
@@ -151,6 +163,29 @@ class RuntimeEngine:
                 goal=task.goal
 
             )
+
+            if self.event_manager:
+
+                await self.event_manager.publish(
+
+                    self.event_builder.create(
+
+                        EventType.TASK_STARTED,
+
+                        source="runtime",
+
+                        payload={
+
+                            "task_id": task.task_id,
+
+                            "goal": task.goal
+
+                        }
+
+                    )
+
+                )
+
 
             if self.memory:
 
@@ -244,6 +279,38 @@ class RuntimeEngine:
 
             )
 
+            
+            if self.event_manager:
+
+                await self.event_manager.publish(
+
+                    self.event_builder.create(
+
+                        EventType.AGENT_SELECTED,
+
+                        source="agent",
+
+                        payload={
+
+                            "agent": task.metadata.get(
+
+                                "agent"
+
+                            ),
+
+                            "role": task.metadata.get(
+
+                                "agent_role"
+
+                            )
+
+                        }
+
+                    )
+
+                )
+
+
 
             result = await self.workflow_runner.run(
                 context
@@ -330,25 +397,19 @@ class RuntimeEngine:
 
                 )
 
-                knowledge = (
-
-                    self.knowledge_promoter.promote(
-
-                        experience_history
-
-                    )
-
-                )
-
-
                 if experience_history is None:
 
-                    experience_history  = []
-
+                    experience_history = []
 
                 experience_history.append(
 
                     experience
+
+                )
+
+                knowledge = self.knowledge_promoter.promote(
+
+                    experience_history
 
                 )
 
@@ -455,6 +516,28 @@ class RuntimeEngine:
 
                 )
 
+            if self.event_manager:
+
+                await self.event_manager.publish(
+
+                    self.event_builder.create(
+
+                        EventType.TASK_COMPLETED,
+
+                        source="runtime",
+
+                        payload={
+
+                            "task_id": task.task_id,
+
+                            "goal": task.goal
+
+                        }
+
+                    )
+
+                )
+
 
             return {
 
@@ -478,6 +561,22 @@ class RuntimeEngine:
 
                     "retry_count":
                         self.retry_count,
+
+                    "agent":
+
+                        task.metadata.get(
+
+                            "agent"
+
+                        ),
+
+                    "agent_role":
+
+                        task.metadata.get(
+
+                            "agent_role"
+
+                        ),
                     
                     "reflection":
                         reflection,
@@ -503,6 +602,28 @@ class RuntimeEngine:
 
                 pass
 
+
+            if self.event_manager:
+
+                await self.event_manager.publish(
+
+                    self.event_builder.create(
+
+                        EventType.TASK_FAILED,
+
+                        source="runtime",
+
+                        payload={
+
+                            "task_id": task.task_id,
+
+                            "error": str(error)
+
+                        }
+
+                    )
+
+                )
 
 
             return {
