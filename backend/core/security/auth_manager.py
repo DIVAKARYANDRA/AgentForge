@@ -2,10 +2,8 @@
 Authentication Manager.
 """
 
-from core.security import (
-    TokenService,
-    UserContext
-)
+from .token_service import TokenService
+from .auth_models import UserContext
 
 
 class AuthenticationManager:
