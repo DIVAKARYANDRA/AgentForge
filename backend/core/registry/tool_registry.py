@@ -27,9 +27,7 @@ class ToolRegistry:
         """
         name = tool.name
 
-        self.validate_tool(
-            tool
-        )
+        self.validate_tool(tool)
 
         self._tools[name] = ToolRegistration(
             name=name,
@@ -102,13 +100,9 @@ class ToolRegistry:
 
                         tool = obj()
 
-                        self.validate_tool(
-                            tool
-                        )
+                        self.validate_tool(tool)
 
-                        self.register(
-                            tool
-                        )
+                        self.register(tool)
 
                         print(
                             f"[ToolRegistry] "
@@ -203,22 +197,15 @@ class ToolRegistry:
         """
         return list(self.categories.keys())
 
-    def validate_tool(
-        self,
-        tool
-    ):
+    def validate_tool(self, tool):
         """
         Validate tool metadata before registration.
         """
 
         required_fields = [
-
             "name",
-
             "category",
-
             "description"
-
         ]
 
         for field in required_fields:
@@ -232,69 +219,55 @@ class ToolRegistry:
             if not value:
 
                 raise ValueError(
-
                     f"Tool '{tool.__class__.__name__}' "
-
                     f"is missing required field '{field}'"
-
                 )
 
-        if not hasattr(
-            tool,
-            "execute"
-        ):
+        if not hasattr(tool, "execute"):
 
             raise ValueError(
-
                 f"{tool.name} "
-
                 "does not implement execute()"
-
             )
 
         return True
 
-    def statistics(
-        self
-    ):
+    def statistics(self):
 
         return {
 
             "total_tools":
-
-                len(self.tools),
+                len(self._tools),
 
             "total_categories":
-
                 len(self.categories),
 
             "categories":
-
                 self.categories,
 
             "tool_names":
-
-                list(self.tools.keys())
+                list(self._tools.keys())
 
         }
 
-    async def health_status(
-        self
-    ):
+    async def health_status(self):
 
         status = {}
 
-        for name, tool in self.tools.items():
-
-            status[name] = await tool.health_check()
+        for name, registration in self._tools.items():
+            tool = registration.tool
+            if hasattr(tool, "health_check"):
+                status[name] = await tool.health_check()
+            else:
+                status[name] = {"status": "ok"}
 
         return status
 
-    async def tool_health(
-        self,
-        name
-    ):
+    async def tool_health(self, name):
 
         tool = self.get(name)
 
-        return await tool.health_check()
+        if hasattr(tool, "health_check"):
+            return await tool.health_check()
+
+        return {"status": "ok"}
