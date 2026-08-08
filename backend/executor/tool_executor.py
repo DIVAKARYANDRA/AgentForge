@@ -63,11 +63,31 @@ class ToolExecutor:
 
             start = time.perf_counter()
 
+            arguments = arguments or {}
+
+            last_output = context.get_last_tool_output()
+
+            if (
+
+                last_output is not None
+
+                and
+
+                "previous_output" not in arguments
+
+            ):
+
+                arguments["previous_output"] = (
+
+                    last_output
+
+                )
+
             result = await tool.execute(
 
                 context,
 
-                **(arguments or {})
+                **arguments
 
             )
 

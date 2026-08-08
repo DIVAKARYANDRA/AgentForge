@@ -264,43 +264,83 @@ class WorkflowRunner:
 
                 )
 
-
-
         # -----------------------------
         # Tool Selection
         # -----------------------------
 
-
         if self.tools:
 
+            decision = await self.tool_selector.select(
 
-            decision = await (
-                self.tool_selector.select(
+                task.description,
 
-                    task.description,
+                self.tools.get_tool_metadata()
 
-                    self.tools.get_tool_metadata()
-
-                )
             )
 
+            # ---------------------------------
+            # Normalize decision
+            # ---------------------------------
 
+            if hasattr(decision, "tools"):
 
-            if (
-                decision.use_tool
-                and
-                decision.tool_name
-            ):
+                tool_decisions = decision.tools
 
+            else:
 
+                tool_decisions = [decision]
+
+            print(
+                "TOOLS TO EXECUTE:",
+                len(tool_decisions)
+            )
+
+            # ---------------------------------
+            # Execute all selected tools
+            # ---------------------------------
+
+            for decision in tool_decisions:
+
+                tool_name = decision.tool_name
+
+                if not tool_name:
+                    continue
+
+                print(
+
+                    "EXECUTING:",
+
+                    tool_name
+
+                )
 
                 tool_result = await self.tool_executor.execute(
 
-                    decision.tool_name,
+                    tool_name,
 
                     context,
 
                     decision.arguments
+
+                )
+
+                context.store_tool_output(
+
+                    tool_name,
+
+                    tool_result
+
+                )
+
+                print(
+
+                    "TOOL OUTPUTS:",
+
+                    list(
+
+                        context.tool_outputs.keys()
+
+                    )
 
                 )
 

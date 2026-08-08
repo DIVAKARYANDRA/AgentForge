@@ -41,7 +41,51 @@ class FileWriterTool(BaseTool):
     ):
 
         path = kwargs.get("path")
-        content = kwargs.get("content")
+        content = kwargs.get(
+
+            "content"
+
+        )
+
+        if content is None:
+
+            previous = kwargs.get(
+
+                "previous_output"
+
+            )
+
+            if previous:
+
+                if hasattr(
+
+                    previous,
+
+                    "output"
+
+                ):
+
+                    content = str(
+
+                        previous.output
+
+                    )
+
+                else:
+
+                    content = str(
+
+                        previous
+
+                    )
+
+        print(
+
+            "FILE WRITER CONTENT:",
+
+            content
+
+        )
 
         if not path:
 
