@@ -54,9 +54,7 @@ class ToolSelector:
             )
 
 
-
         prompt = f"""
-
 You are a strict AI tool router.
 
 Your only job is to map the user task
@@ -117,20 +115,19 @@ Your response format:
 If multiple tools are required,
 return:
 
-{
+{{
     "tools":[
-        {
+        {{
             "tool_name":"tool1",
-            "arguments":{}
-        },
-        {
+            "arguments":{{}}
+        }},
+        {{
             "tool_name":"tool2",
-            "arguments":{}
-        }
+            "arguments":{{}}
+        }}
     ],
     "reason":"Multiple tools required"
-}
-
+}}
 """
 
         response = await self.provider.generate(
