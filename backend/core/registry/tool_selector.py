@@ -9,7 +9,10 @@ import json
 from core.registry.tool_decision import (
     ToolDecision
 )
-
+from core.registry.multi_tool_decision import (
+    MultiToolDecision,
+    SelectedTool
+)
 
 
 class ToolSelector:
@@ -111,6 +114,23 @@ Your response format:
  "reason": ""
 }}
 
+If multiple tools are required,
+return:
+
+{
+    "tools":[
+        {
+            "tool_name":"tool1",
+            "arguments":{}
+        },
+        {
+            "tool_name":"tool2",
+            "arguments":{}
+        }
+    ],
+    "reason":"Multiple tools required"
+}
+
 """
 
         response = await self.provider.generate(
@@ -175,6 +195,50 @@ Your response format:
                 data = json.loads(
                     content
                 )
+
+                if "tools" in data:
+
+                    tools = []
+
+                    for item in data["tools"]:
+
+                        tools.append(
+
+                            SelectedTool(
+
+                                tool_name=item.get(
+
+                                    "tool_name",
+
+                                    ""
+
+                                ),
+
+                                arguments=item.get(
+
+                                    "arguments",
+
+                                    {}
+
+                                )
+
+                            )
+
+                        )
+
+                    return MultiToolDecision(
+
+                        tools=tools,
+
+                        reason=data.get(
+
+                            "reason",
+
+                            ""
+
+                        )
+
+                    )
 
 
 

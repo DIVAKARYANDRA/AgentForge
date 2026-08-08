@@ -29,6 +29,22 @@ class ToolRegistry:
 
         self.validate_tool(tool)
 
+
+        if hasattr(
+
+            tool,
+
+            "set_tool_registry"
+
+        ):
+
+            tool.set_tool_registry(
+
+                self
+
+            )
+
+
         self._tools[name] = ToolRegistration(
             name=name,
             tool=tool
