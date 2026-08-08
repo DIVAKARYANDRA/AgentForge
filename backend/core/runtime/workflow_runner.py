@@ -475,3 +475,28 @@ class WorkflowRunner:
 
 
         return prompt
+
+    async def run_step(
+        self,
+        step,
+        context
+    ):
+        """
+        Execute one workflow step.
+        """
+
+        runtime_task = self.dispatcher.create_task(
+
+            step.step_id,
+
+            step.description
+
+        )
+
+        return await self.execute_task(
+
+            runtime_task,
+
+            context
+
+        )
