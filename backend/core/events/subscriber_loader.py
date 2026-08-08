@@ -14,6 +14,10 @@ from core.events.subscribers import (
 
 )
 
+from core.events.subscribers import (
+    StreamSubscriber
+)
+
 
 class SubscriberLoader:
 
@@ -21,7 +25,9 @@ class SubscriberLoader:
 
         self,
 
-        memory=None
+        memory=None,
+
+        stream_manager=None
 
     ):
 
@@ -29,6 +35,10 @@ class SubscriberLoader:
 
             LoggingSubscriber()
 
+        )
+
+        self.stream = StreamSubscriber(
+            stream
         )
 
         self.memory = (
@@ -52,6 +62,14 @@ class SubscriberLoader:
             WorkflowSubscriber()
 
         )
+
+        self.stream = None
+
+        if stream_manager:
+
+            self.stream = StreamSubscriber(
+                stream_manager
+            )
 
 
     def register(
@@ -101,3 +119,13 @@ class SubscriberLoader:
                 self.memory.handle
 
             )
+
+            if self.stream:
+
+                event_manager.subscribe(
+
+                    event,
+
+                    self.stream.handle
+
+                )

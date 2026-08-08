@@ -48,3 +48,12 @@ class EventManager:
             event
 
         )
+
+    @property
+    def subscribers(
+
+        self
+
+    ):
+
+        return self.bus.subscriber_count

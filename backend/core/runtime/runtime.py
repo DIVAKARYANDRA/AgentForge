@@ -677,3 +677,22 @@ class RuntimeEngine:
             )
 
         return response
+
+    @property
+    def summary(
+
+        self
+
+    ):
+
+        return {
+
+            "state":
+
+                self.lifecycle.current_state.name,
+
+            "retry_count":
+
+                self.retry_count
+
+        }

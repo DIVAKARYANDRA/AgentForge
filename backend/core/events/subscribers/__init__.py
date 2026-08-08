@@ -13,3 +13,7 @@ from .analytics_subscriber import (
 from .workflow_subscriber import (
     WorkflowSubscriber
 )
+
+from .stream_subscriber import (
+    StreamSubscriber
+)

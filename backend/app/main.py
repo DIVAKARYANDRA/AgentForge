@@ -10,6 +10,13 @@ from api.router import api_router
 
 from config.settings import settings
 from api.runtime import router as runtime_router
+from api.mission_control.router import (
+    router as mission_router
+)
+
+from api.mission_control.websocket import (
+    router as websocket_router
+)
 
 app = FastAPI(
 
@@ -29,4 +36,15 @@ app.include_router(
 
 app.include_router(
     runtime_router
+)
+
+app.include_router(
+
+    mission_router
+
+)
+
+
+app.include_router(
+    websocket_router
 )

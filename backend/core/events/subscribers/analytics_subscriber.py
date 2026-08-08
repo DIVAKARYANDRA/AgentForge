@@ -48,3 +48,17 @@ class AnalyticsSubscriber:
             key
 
         ] += 1
+
+
+    @property
+    def summary(
+
+        self
+
+    ):
+
+        return dict(
+
+            self.metrics
+
+        )

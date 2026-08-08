@@ -47,6 +47,11 @@ from core.runtime import (
 from core.planner import (
     Planner
 )
+from api.mission_control.service import (
+    MissionControlService
+)
+
+import api.mission_control.router as mission_router
 
 logger = logging.getLogger(__name__)
 
@@ -271,6 +276,24 @@ async def lifespan(app: FastAPI):
         DependencyType.RUNTIME,
 
         runtime_manager
+
+    )
+
+    # ---------------------------------
+    # Mission Control Initialization
+    # ---------------------------------
+
+    mission_router.mission_service = MissionControlService(
+
+        runtime=runtime_manager.runtime,
+
+        queue=None,
+
+        scheduler=None,
+
+        analytics=None,
+
+        event_manager=None
 
     )
 
