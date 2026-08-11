@@ -1,0 +1,166 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@import "@fontsource-variable/inter";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+/* -------------------------------------------------------------------------
+ * AgentForge Design Tokens
+ * A deep, near-black operating-system surface with a single indigo/blue
+ * signal color reserved for interactive + "live" states (running agents,
+ * active nodes, focus). Everything else stays quiet and desaturated so the
+ * accent reads as *meaningful* rather than decorative.
+ * ---------------------------------------------------------------------- */
+
+@theme {
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+
+  /* Base scale — exposed as Tailwind color utilities, e.g. bg-surface */
+  --color-background: #08090c;
+  --color-surface: #0f1116;
+  --color-surface-2: #151821;
+  --color-surface-3: #1b1f2a;
+
+  --color-border: #21242e;
+  --color-border-strong: #2c3140;
+
+  --color-foreground: #e8e9ee;
+  --color-muted-foreground: #8b90a0;
+  --color-subtle-foreground: #565b6b;
+
+  --color-primary: #4f5bee;
+  --color-primary-hover: #626ef2;
+  --color-primary-foreground: #f5f6ff;
+  --color-primary-muted: #171b3a;
+  --color-primary-ring: #4f5bee80;
+
+  --color-success: #34d399;
+  --color-success-muted: #123128;
+
+  --color-warning: #f2b84b;
+  --color-warning-muted: #332a12;
+
+  --color-destructive: #f0576b;
+  --color-destructive-muted: #33141b;
+
+  --color-info: #4f9bee;
+}
+
+/* -------------------------------------------------------------------------
+ * shadcn/ui compatibility layer — maps the token names shadcn components
+ * expect (bg-background, bg-card, border-input, ring-ring, etc.) onto the
+ * AgentForge tokens above so components/ui/* can be dropped in unmodified.
+ * ---------------------------------------------------------------------- */
+
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+
+  --card: var(--color-surface);
+  --card-foreground: var(--color-foreground);
+
+  --popover: var(--color-surface-2);
+  --popover-foreground: var(--color-foreground);
+
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+
+  --secondary: var(--color-surface-2);
+  --secondary-foreground: var(--color-foreground);
+
+  --muted: var(--color-surface-2);
+  --muted-foreground: var(--color-muted-foreground);
+
+  --accent: var(--color-surface-3);
+  --accent-foreground: var(--color-foreground);
+
+  --destructive: var(--color-destructive);
+  --destructive-foreground: var(--color-primary-foreground);
+
+  --border: var(--color-border);
+  --input: var(--color-border-strong);
+  --ring: var(--color-primary);
+
+  --radius: var(--radius-md);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    background-color: var(--color-primary-muted);
+    color: var(--color-foreground);
+  }
+
+  /* Visible, on-brand keyboard focus — never suppressed */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-surface-3);
+    border-radius: 999px;
+    border: 2px solid var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-border-strong);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Reserved for glass surfaces — sidebar, topbar, command palette, modals.
+     Used sparingly, per the brief: "glassmorphism only where appropriate". */
+  .glass {
+    background-color: color-mix(in oklab, var(--color-surface) 72%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  .glass-border {
+    border-color: color-mix(in oklab, var(--color-border-strong) 60%, transparent);
+  }
+
+  /* Ambient signal glow — the one recurring "live system" motif */
+  .signal-glow {
+    box-shadow: 0 0 0 1px var(--color-primary-ring), 0 0 24px -8px var(--color-primary);
+  }
+}
